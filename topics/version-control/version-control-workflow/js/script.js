@@ -53,13 +53,18 @@ function draw() {
         pop();
     }
 
-    // Draw a red circle at the position of the mouse
-    push();
-    // No line around the shape
-    noStroke();
-    // Make it red (RGB)
-    fill(255, 0, 0);
-    // Draw a 100x100 circle at the mouse position
-    ellipse(mouseX, mouseY, 100, 100);
-    pop();
+      //Draw a purple half-circle mouse indicator
+    const canvas = document.querySelector('#defaultCanvas1');
+    if(canvas.getContext){
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle='purple';
+        ctx.fillStyle = 'rgba(127, 0, 255 ,0.4)';
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 20, 0, Math.PI);
+
+    ctx.stroke();
+    ctx.fill();
+    }
 }
