@@ -1,5 +1,5 @@
 # CART253
-[!banner](images/Banner.png)
+![banner](images/Banner.png)
 
 This repo is to collect & show off my prototyping work in CART253.
 ## Journal
