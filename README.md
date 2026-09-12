@@ -1,14 +1,20 @@
-# CART253
-![banner](images/Banner.png)
+# Fun Stuff
+<p align="center">
+<img src="images/Banner.png" />
+</p>
 <p align="center">
 <img src="images/plant_0.png" />
 </p>
-
+<p align="center">
+🪴Interactive component under construction?
+</p>
+<hr/>
 This repo is to collect & show off my prototyping work in CART253.
-## Journal
+
+## Link
 [Reflective Journal](https://github.com/kikiisong/CART253_New/blob/main/journal.md)
 
-## Assignments
+## Prototype 
 
 
 ## In-Class Exercise
