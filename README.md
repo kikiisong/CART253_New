@@ -8,8 +8,10 @@
 <p align="center">
 🪴Interactive component under construction?
 </p>
-<hr/>
-This repo is to collect & show off my prototyping work in CART253.
+
+---
+
+>This repo is to collect & show off my prototyping work in *CART253*.
 
 ## Link
 [Reflective Journal](https://github.com/kikiisong/CART253_New/blob/main/journal.md)
@@ -19,3 +21,5 @@ This repo is to collect & show off my prototyping work in CART253.
 
 ## In-Class Exercise
 [Version Control Page](https://kikiisong.github.io/CART253_New/topics/version-control/version-control-workflow/)
+
+
