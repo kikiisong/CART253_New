@@ -13,6 +13,7 @@ This description should help the reader understand what the program is, anything
 This bit should attribute any code, assets or other elements used taken from other sources. For example:
 
 > - [Tutorial](https://p5js.org/tutorials/custom-shapes-and-smooth-curves/) used for making the Sparkles.
+> - Inspiration on how to do the Clouds: [Youtube](https://www.youtube.com/watch?v=O5jklzDvlyk). Saved me from trying to figure out the Bezier Curves...
 
 > - This project uses [p5.js](https://p5js.org).
 > - The clown image is a capture of the clown from the Apple emoji character set.
