@@ -1,9 +1,8 @@
 /**
- * Title of Project
- * Author Name
+ * Instruction Challenge
+ * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * A Landscape drawing made with p5 library
  */
 
 "use strict";
@@ -12,7 +11,7 @@
  * OH LOOK I DIDN'T DESCRIBE SETUP!!
 */
 function setup() {
-
+    createCanvas(480, 640);
 }
 
 
@@ -20,5 +19,10 @@ function setup() {
  * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
 */
 function draw() {
-
+    
+    push();
+    noSroke();
+    fill(139, 69, 19);
+    rect(0, 420, 480, 220);
+    pop();
 }
