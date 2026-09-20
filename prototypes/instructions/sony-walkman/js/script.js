@@ -33,14 +33,23 @@ function drawBody()
 {
     push();
     noStroke();
+    //draw top
     fill("#C0C0C0");
-    rect(100,50,500,300);
+    rect(100,50,500,70);
+    //draw bottom
+    fill("#4563b6");
+    rect(100,120,500,230);
+    //draw dividing line
+    stroke("#141822")
+    line(180,120,180,350);
     pop();
 }
 
 function drawWalker()
 {
+    push();
 
+    pop();
 
 }
 
