@@ -11,7 +11,7 @@
  * Set up canvas
 */
 function setup() {
-    createCanvas(640,480);
+    createCanvas(640,640);
 
 }
 
@@ -20,10 +20,25 @@ function setup() {
  * Draw the walkman
 */
 function draw() {
+    //resized canvas to increase height, translate the drawing to avoid change individual coordianates
+    translate(-20, 250);
+    //draw parts
+    drawBackground();
+    drawHeadphoneHandle();
     drawBody();
     drawWalker();
     drawButtons();
     drawHeadphones();
+}
+
+function drawBackground()
+{
+    background("#4563b6");
+    push();
+    noStroke();
+    fill("#fcd52b")
+    ellipse(340, 300, 800, 800);
+    pop();
 }
 
 /**
@@ -84,9 +99,33 @@ function drawButtons()
     pop();
 }
 
+/**
+ * draw handle seperately so it's the bottom layer
+ */
+function drawHeadphoneHandle()
+{
+    push();
+    noFill();
+    stroke("#2d190d");
+    strokeWeight(5);
+    arc(350, 50, 590,550, PI-QUARTER_PI, TWO_PI+QUARTER_PI);
+    pop();
+}
+
+/**
+ * Headphones with orange ear cushions and black handle
+ */
 function drawHeadphones()
 {
     push();
+    //ear cushions
+    noStroke();
+    fill("#2d190d");
+    arc(85, 175, 40, 70, HALF_PI, 3*HALF_PI);
+    arc(610, 175, 40, 70, -HALF_PI, HALF_PI);
+    fill("#ce783b");
+    rect(80, 110, 26, 130, 120);
+    rect(590, 110, 26, 130, 100);
     pop();
 }
 
