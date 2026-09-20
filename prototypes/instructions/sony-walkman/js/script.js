@@ -20,7 +20,7 @@ function setup() {
  * Draw the walkman
 */
 function draw() {
-    //resized canvas to increase height, translate the drawing to avoid change individual coordianates
+    //resized canvas to increase height, translate the drawing to avoid changing individual coordianates
     translate(-20, 250);
     //draw parts
     drawBackground();
