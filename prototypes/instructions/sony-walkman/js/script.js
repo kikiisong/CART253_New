@@ -48,7 +48,19 @@ function drawBody()
 function drawWalker()
 {
     push();
-
+    noStroke();
+    //walker background, round corner yayyy
+    fill("#1b1d23");
+    rect(260,180,260,120,5);
+    //walkers
+    stroke("#eabd55")
+    strokeWeight(3);
+    ellipse(310,240,38,38);
+    ellipse(470,240,38,38);
+    //walker middle background
+    noStroke();
+    fill("#ebebed");
+    rect(340,215,100,50,10);
     pop();
 
 }
