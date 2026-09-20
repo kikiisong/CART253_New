@@ -45,6 +45,9 @@ function drawBody()
     pop();
 }
 
+/**
+ * The walker part
+ */
 function drawWalker()
 {
     push();
@@ -65,13 +68,25 @@ function drawWalker()
 
 }
 
+/**
+ * Silver button on the top and orange button on the side
+ */
 function drawButtons()
 {
-
+    push();
+    stroke("#f7f7f8");
+    //top button
+    fill("#C0C0C0");
+    rect(140,40, 60, 13);
+    //side button
+    fill("#e47322");
+    rect(85, 240, 15, 40);
+    pop();
 }
 
 function drawHeadphones()
 {
-
+    push();
+    pop();
 }
 
