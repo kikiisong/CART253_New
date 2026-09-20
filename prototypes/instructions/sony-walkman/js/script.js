@@ -29,11 +29,28 @@ function draw() {
 /**
  * Silver(Grey top) and blue bottom
  */
-drawBody()
+function drawBody()
 {
     push();
     noStroke();
     fill("#C0C0C0");
-    rect();
+    rect(100,50,500,300);
     pop();
 }
+
+function drawWalker()
+{
+
+
+}
+
+function drawButtons()
+{
+
+}
+
+function drawHeadphones()
+{
+
+}
+
