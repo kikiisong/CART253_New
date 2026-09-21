@@ -9,6 +9,7 @@ Kiki
 Replicating one of Persona 3's UI Design.
 
 ## Attribution
+> - [Text on a curve example](https://editor.p5js.org/ObjectART/sketches/8hkeDOQ4O)
 
 > - This project uses [p5.js](https://p5js.org).
 > - The clown image is a capture of the clown from the Apple emoji character set.
