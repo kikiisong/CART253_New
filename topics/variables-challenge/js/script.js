@@ -21,8 +21,8 @@ let mrFurious = {
   },
   minrage: -0.1,
   maxrage: 0.1,
-  constrainmin: -10,
-  constrainmax: 10
+  constrainmin: 190,
+  constrainmax: 210
 
 };
 
@@ -67,6 +67,7 @@ function setup() {
  * Draw (and update) Mr. Furious
  */
 function draw() {
+//turn background black
 background(
   sky.fill.r -= 1,
   sky.fill.g -= 1,
@@ -75,14 +76,18 @@ background(
   // Draw Mr. Furious as a coloured circle
   push();
   noStroke();
+//turn mr Furious red
   mrFurious.fill.g -= 1;
   mrFurious.fill.b -= 1;
   fill(mrFurious.fill.r, mrFurious.fill.g, mrFurious.fill.b);
+
   // make him shake more but constrain him to be within the canvas
-  mrFurious.x += random(mrFurious.minrage-=0.1, mrFurious.maxrage+=0.1);
-  mrFurious.y += random(mrFurious.minrage-=0.1, mrFurious.maxrage+=0.1)
-  mrFurious.x = constrain(mrFurious.x, 100, 300);
-  mrFurious.y = constrain(mrFurious.y, 100 ,300);
+  mrFurious.minrage-=0.1;
+  mrFurious.maxrage+=0.1
+  mrFurious.x += random(mrFurious.minrage, mrFurious.maxrage);
+  mrFurious.y += random(mrFurious.minrage, mrFurious.maxrage)
+  mrFurious.x = constrain(mrFurious.x, mrFurious.constrainmin, mrFurious.constrainmax);
+  mrFurious.y = constrain(mrFurious.y, mrFurious.constrainmin, mrFurious.constrainmax);
   ellipse(mrFurious.x, mrFurious.y, mrFurious.size);
   pop();
 
