@@ -18,7 +18,11 @@ let mrFurious = {
     r: 255,
     g: 225,
     b: 225
-  }
+  },
+  minrage: -0.1,
+  maxrage: 0.1,
+  constrainmin: -10,
+  constrainmax: 10
 
 };
 
@@ -74,6 +78,11 @@ background(
   mrFurious.fill.g -= 1;
   mrFurious.fill.b -= 1;
   fill(mrFurious.fill.r, mrFurious.fill.g, mrFurious.fill.b);
+  // make him shake more but constrain him to be within the canvas
+  mrFurious.x += random(mrFurious.minrage-=0.1, mrFurious.maxrage+=0.1);
+  mrFurious.y += random(mrFurious.minrage-=0.1, mrFurious.maxrage+=0.1)
+  mrFurious.x = constrain(mrFurious.x, 100, 300);
+  mrFurious.y = constrain(mrFurious.y, 100 ,300);
   ellipse(mrFurious.x, mrFurious.y, mrFurious.size);
   pop();
 
