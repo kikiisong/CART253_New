@@ -2,7 +2,7 @@
 
 Kiki
 
-[View this project online](URL_FOR_THE_RUNNING_PROJECT)
+[View this project online](https://kikiisong.github.io/CART253_New/prototypes/instructions/blueberry-swiss-roll/)
 
 ## Description
 
