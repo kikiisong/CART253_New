@@ -17,6 +17,21 @@
 [Reflective Journal](https://github.com/kikiisong/CART253_New/blob/main/journal.md)
 
 ## Prototype 
+### Instructions
+#### Blueberry Swiss Roll
+![Swiss Roll](images/swiss-roll.png)
+[Page](https://kikiisong.github.io/CART253_New/prototypes/instructions/blueberry-swiss-roll/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/instructions/blueberry-swiss-roll)
+
+#### SONY Walkman
+![Walkman](images/walkman.png)
+[Page](https://kikiisong.github.io/CART253_New/prototypes/instructions/sony-walkman/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/instructions/sony-walkman)
+
+### Persona 3 UI
+![Persona](images/persona.png)
+[Page](https://kikiisong.github.io/CART253_New/prototypes/instructions/persona-ui/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/instructions/persona-ui)
 
 
 ## In-Class Exercise
