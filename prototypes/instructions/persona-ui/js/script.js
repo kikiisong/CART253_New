@@ -20,14 +20,12 @@ function setup() {
 */
 function draw() {
     drawOutline();
+    drawTitle();
     drawDarkerBlueBg();
     drawLighterBlueBg();
     drawBGOverlays();
     drawDay();
     drawMenu();
-    drawRedDebris();
-    drawTitle();
-    drawProtagonist();
 }
 
 /**
@@ -43,6 +41,9 @@ function drawOutline()
     pop();
 }
 
+/**
+ * Draw top layer of the background cutout
+ */
 function drawLighterBlueBg()
 {
     push();
@@ -52,6 +53,9 @@ function drawLighterBlueBg()
     pop();
 }
 
+/**
+ * Draw bottom layer of the background cutout
+ */
 function drawDarkerBlueBg()
 {
     push();
@@ -78,6 +82,9 @@ function drawBGOverlays()
     pop();
 }
 
+/**
+ * Draw the date text
+ */
 function drawDay()
 {
     push();
@@ -89,6 +96,9 @@ function drawDay()
     pop();
 }
 
+/**
+ * Draw a few menu items
+ */
 function drawMenu()
 {
     push();
@@ -113,24 +123,30 @@ function drawMenu()
     rotate(radians(-1));
     textSize(36);
     fill("#42c8ed");
-    text("DICTIONARY", 660, 200)
+    text("DICTIONARY", 660, 200);
+
+    rotate(radians(10));
+    textSize(35);
+    fill("#1f8fe9");
+    text("LOAD DATA", 720, 100);
+
     pop();
 }
 
-function drawRedDebris()
-{
-
-}
-
+/** draw the title text along a circle
+ * mostly taken from an example code with some parameter tweaking
+ * the math is a bit intense for the current me ;;
+ */
 function drawTitle()
 {
     push();
     var message = "SYSTEM";
     textAlign(CENTER);
-    textSize(100);
+    textSize(250);
     var msgWidth = textWidth(message);
 
-    translate(400, 0);
+    translate(780, 0);
+    rotate(PI/7);
     var msgWidth2 = 0;
     for (var j = message.length;j>=0; j--)  {
     // Instead of a constant width, we check the width of each character.
@@ -149,7 +165,7 @@ function drawTitle()
     // Instead of a constant width, we check the width of each character.
     var currentChar = message.charAt(i);
     var w = textWidth(currentChar);
-    var r = 920/2;
+    var r = 635;
 
     // Each box is centered so we move half the width
     arclength += w/2;
@@ -173,9 +189,4 @@ function drawTitle()
   }
 
     pop();
-}
-
-function drawProtagonist()
-{
-
 }
