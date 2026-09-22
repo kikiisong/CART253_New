@@ -2,14 +2,15 @@
 
 Kiki
 
-[View this project online](URL_FOR_THE_RUNNING_PROJECT)
+[View this project online](https://kikiisong.github.io/CART253_New/prototypes/instructions/persona-ui/)
 
 ## Description
 
 Replicating one of Persona 3's UI Design.
+![Persona UI](https://www.gameuidatabase.com/uploads/Persona-3-Reload02182024-103900-70427.jpg)
 
 ## Attribution
-> - [Text on a curve example](https://editor.p5js.org/ObjectART/sketches/8hkeDOQ4O)
+> - [Text on a curve example](https://editor.p5js.org/ObjectART/sketches/8hkeDOQ4O) used for doing the title
 
 > - This project uses [p5.js](https://p5js.org).
 > - The clown image is a capture of the clown from the Apple emoji character set.
