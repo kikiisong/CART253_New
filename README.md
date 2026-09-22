@@ -14,7 +14,9 @@
 >This repo is to collect & show off my prototyping work in *CART253*.
 
 ## Link
-[Reflective Journal](https://github.com/kikiisong/CART253_New/blob/main/journal.md)
+[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20260922.md)
+
+[Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
 ## Prototype 
 ### Instructions
