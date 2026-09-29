@@ -142,6 +142,4 @@ function checkTarget()
     else {
         target.fill = target.fills.noOverlap;
     }
-
-
 }
