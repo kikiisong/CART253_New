@@ -1,6 +1,6 @@
-# TITLE OF PROJECT
+# Push A Puck
 
-AUTHOR NAME
+Kiki, Mona
 
 [View this project online](URL_FOR_THE_RUNNING_PROJECT)
 
