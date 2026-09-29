@@ -1,24 +1,41 @@
 /**
- * Title of Project
- * Author Name
+ * Fireworks
+ * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Loop of a fireworks animation
  */
 
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Set up the canvas
 */
 function setup() {
-
+    createCanvas(600,900);
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
-*/
+ * Drawing the animation
+*/ 
 function draw() {
+    background("#1b1d21");
+    stemAnimation();
+    flowerAnimation();
+    flash();
+}
 
+function stemAnimation()
+{
+
+}
+
+function flowerAnimation()
+{
+
+}
+
+function flash()
+{
+    
 }
