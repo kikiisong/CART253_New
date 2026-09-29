@@ -22,16 +22,21 @@ let flowerSizeMax = 20;
 let flowerSizeMin = 3
 let flowerInnerRadius = 10;
 let flowerOuterRadius = 20;
+let deltaFlowerSize = 10;
 const numPetals = 10; 
+let outerPoints;
+let scatterControl = 30;
+let scatterCounter = 0;
 
 let stemYStop = flowerCenterY;
 
 
 /**
- * Set up the canvas
+ * Set up the canvas & initialize array
 */
 function setup() {
     createCanvas(canvasW,canvasH);
+    outerPoints = Array.from({ length:numPetals }, () => ({ x: 0, y: 0 }));
 }
 
 
@@ -45,8 +50,9 @@ function draw() {
     if(stemYTop>=flowerCenterY)
     {
         stemAnimation();
+    }else{
+        flowerAnimation();
     }
-    flowerAnimation();
     flash();
 }
 
@@ -76,6 +82,11 @@ function stemAnimation()
  */
 function flowerAnimation()
 {
+    if(++scatterCounter % scatterControl === 0 && nth === 0)
+    {
+        Update()
+    }
+
     for (let i = 0; i < numPetals; i++) {
         drawAPetal(i, numPetals);
     }
@@ -91,14 +102,27 @@ function drawAPetal(nth, numPoints)
     let x_start = canvasW/2 + cos(angle) * flowerInnerRadius;
     let y_start = flowerCenterY + sin(angle) * flowerInnerRadius;
 
-    // End point (larger circle)
-    let x_end = canvasW/2 + cos(angle) * flowerOuterRadius;
-    let y_end = flowerCenterY + sin(angle) * flowerOuterRadius;
+    //control the expanding remainder calculation
+    //only increase the radius if time is up
+    
+    {
+         flowerOuterRadius = flowerInnerRadius + random(flowerSizeMin, flowerSizeMax);
+        // End point (larger circle)
+        let x_end = canvasW/2 + cos(angle) * flowerOuterRadius;
+        let y_end = flowerCenterY + sin(angle) * flowerOuterRadius;
+        //Save the points so it draws the same lines before the next expand
+        outerPoints[nth].x = x_end;
+        outerPoints[nth].y = y_end;
+        flowerInnerRadius += deltaFlowerSize;
+        flowerSizeMax += deltaFlowerSize;
+        flowerSizeMin += deltaFlowerSize;
+    }
+
 
     //draw the line
     stroke("#FFFFFF");
     strokeWeight(6);
-    line(x_start, y_start, x_end, y_end);
+    line(x_start, y_start, outerPoints[nth].x, outerPoints[nth].y);
     pop();
 }
 
