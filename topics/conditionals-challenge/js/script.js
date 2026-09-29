@@ -10,13 +10,18 @@ const puck = {
   x: 200,
   y: 200,
   size: 100,
-  fill: "#ff0000"
+  fill: "#ff0000",
+  velocity:
+  {
+    x:0,
+    y:0
+  }
 };
 
 const user = {
   x: undefined, // will be mouseX
   y: undefined, // will be mouseY
-  size: 75,
+  size: 30,
   fill: "#000000"
 };
 
@@ -39,6 +44,7 @@ function draw() {
   // Draw the user and puck
   drawUser();
   drawPuck();
+  movePuck();
 }
 
 /**
@@ -69,4 +75,22 @@ function drawPuck() {
   fill(puck.fill);
   ellipse(puck.x, puck.y, puck.size);
   pop();
+}
+
+function movePuck()
+{
+    // Calculate distance between circles' centres
+  const d = dist(user.x, user.y, puck.x, puck.y);
+  // Check if that distance is smaller than their two radii, 
+  // because if it is, they are overlapping by the amazing
+  // power of geometry!
+  const overlap = (d < user.size/2 + puck.size/2);
+  // Set velocity and update position on whether they overlap
+  if (overlap) {
+    puck.velocity.x = (puck.x-user.x) * 0.05;
+    puck.velocity.y = (puck.y-user.y) * 0.05;
+    puck.x += puck.velocity.x;
+    puck.y += puck.velocity.y;
+  }
+
 }
