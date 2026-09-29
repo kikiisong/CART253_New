@@ -8,7 +8,7 @@
 
 const puck = {
   x: 200,
-  y: 200,
+  y: 289,
   size: 100,
   fill: "#ff0000",
   velocity:
@@ -24,6 +24,17 @@ const user = {
   size: 30,
   fill: "#000000"
 };
+
+const target = {
+    x:200,
+    y: 80,
+    size: 200,
+    fill: "blue",
+    fills: {
+        noOverlap: "blue",
+        overlap: "green",
+    }
+}
 
 /**
  * Create the canvas
@@ -41,7 +52,9 @@ function draw() {
   // Move user circle
   moveUser();
   
-  // Draw the user and puck
+  // Draw the target, user and puck
+  drawTarget();
+  checkTarget();
   drawUser();
   drawPuck();
   movePuck();
@@ -77,6 +90,7 @@ function drawPuck() {
   pop();
 }
 
+// Move puck based on user position
 function movePuck()
 {
     // Calculate distance between circles' centres
@@ -92,5 +106,42 @@ function movePuck()
     puck.x += puck.velocity.x;
     puck.y += puck.velocity.y;
   }
+
+}
+
+/**
+ * Draw the target circle
+ */
+function drawTarget()
+{
+    push();
+    noStroke();
+    noFill();
+    stroke(target.fill);
+    strokeWeight(2);
+    //dashed outline
+    drawingContext.setLineDash([10,10]);
+    ellipse(target.x, target.y, target.size);
+    pop();
+}
+
+/**
+ * Check if the puck is fully in the target
+ */
+function checkTarget()
+{
+    const d = dist(puck.x, puck.y, target.x, target.y);
+    // Check if that distance is smaller than their two radii, 
+    // because if it is, they are overlapping by the amazing
+    // power of geometry!
+    const overlap = (d < target.size*0.25);
+    // Set fill(i.e. stroke color) based on whether they overlap
+    if (overlap) {
+        target.fill = target.fills.overlap;
+    }
+    else {
+        target.fill = target.fills.noOverlap;
+    }
+
 
 }

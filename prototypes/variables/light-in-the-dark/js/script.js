@@ -7,6 +7,10 @@
 
 "use strict";
 
+const torch = {
+    size: 50
+};
+
 /**
  * Set up the canvas
 */
