@@ -1,24 +1,23 @@
 /**
- * Title of Project
- * Author Name
+ * Juicyyy
+ * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Pour yourself some juice
  */
 
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Set up the canvas
 */
 function setup() {
-
+    createCanvas(600, 800);
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * Draw the components
 */
 function draw() {
-
+    background("#4db0e2");
 }
