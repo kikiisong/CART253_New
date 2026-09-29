@@ -20,7 +20,8 @@ let speedCounter = 0;
 let flowerCenterY = 200;
 let flowerSizeMax = 20;
 let flowerSizeMin = 3
-let flowerRadius = 10;
+let flowerInnerRadius = 10;
+let flowerOuterRadius = 20;
 const numPetals = 10; 
 
 let stemYStop = flowerCenterY;
@@ -75,49 +76,29 @@ function stemAnimation()
  */
 function flowerAnimation()
 {
-    let radius1 = flowerSizeMin;
-    let radius2 = flowerSizeMax;
-    let centerX = canvasW/2;
-    let centerY = flowerCenterY;
-    push();
-    // Draw circles
-  noFill();
-  stroke(100);
-  circle(centerX, centerY, radius1 * 2);
-  circle(centerX, centerY, radius2 * 2);
+    for (let i = 0; i < numPetals; i++) {
+        drawAPetal(i, numPetals);
+    }
+}
 
-  let points1 = [];
-  let points2 = [];
+function drawAPetal(nth, numPoints)
+{  
+    push(); 
+    // Calculate current angle
+    let angle = TWO_PI * nth / numPoints;
 
-  let numPoints = numPetals;
-  for (let i = 0; i < numPoints; i++) {
+    // Starting point (inner circle)
+    let x_start = canvasW/2 + cos(angle) * flowerInnerRadius;
+    let y_start = flowerCenterY + sin(angle) * flowerInnerRadius;
 
-    // Evenly spaced angle
-    let angle = TWO_PI * i / numPoints;
+    // End point (larger circle)
+    let x_end = canvasW/2 + cos(angle) * flowerOuterRadius;
+    let y_end = flowerCenterY + sin(angle) * flowerOuterRadius;
 
-    // Point on smaller circle
-    let x1 = centerX + cos(angle) * radius1;
-    let y1 = centerY + sin(angle) * radius1;
-
-    // Corresponding point on larger circle
-    let x2 = centerX + cos(angle) * radius2;
-    let y2 = centerY + sin(angle) * radius2;
-
-    points1.push({ x: x1, y: y1 });
-    points2.push({ x: x2, y: y2 });
-
-    // Draw points
-    fill(255, 100, 100);
-    noStroke();
-    circle(x1, y1, 10);
-
-    fill(100, 150, 255);
-    circle(x2, y2, 10);
-
-    // Draw line between corresponding points
-    stroke(100, 100, 100);
-    line(x1, y1, x2, y2);
-  }
+    //draw the line
+    stroke("#FFFFFF");
+    strokeWeight(6);
+    line(x_start, y_start, x_end, y_end);
     pop();
 }
 
