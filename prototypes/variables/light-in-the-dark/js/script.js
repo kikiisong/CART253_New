@@ -8,7 +8,7 @@
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Set up the canvas
 */
 function setup() {
     createCanvas(700, 700);
@@ -16,8 +16,17 @@ function setup() {
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * Set up the torchlight
 */
 function draw() {
     background("#000000");
+    torchlight();
+}
+
+function torchlight()
+{
+    push();
+    fill(255,255,255);
+    circle(mouseX, mouseY, 50, 50)
+    pop();
 }

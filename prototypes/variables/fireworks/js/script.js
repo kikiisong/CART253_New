@@ -112,6 +112,7 @@ function updatePoints()
         innerPoints[i].x=x_start;
         innerPoints[i].y=y_start;
 
+        //randomized the length of each petal
         flowerOuterRadius = flowerInnerRadius + random(flowerSizeMin, flowerSizeMax);
         // End point (larger circle)
         let x_end = canvasW/2 + cos(angle) * flowerOuterRadius;
