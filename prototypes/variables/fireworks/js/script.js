@@ -24,6 +24,7 @@ let flowerInnerRadius = 10;
 let flowerOuterRadius = 20;
 let deltaFlowerSize = 10;
 const numPetals = 10; 
+let innerPoints;
 let outerPoints;
 let scatterControl = 30;
 let scatterCounter = 0;
@@ -36,7 +37,9 @@ let stemYStop = flowerCenterY;
 */
 function setup() {
     createCanvas(canvasW,canvasH);
+    innerPoints = Array.from({ length:numPetals }, () => ({ x: 0, y: 0 }));
     outerPoints = Array.from({ length:numPetals }, () => ({ x: 0, y: 0 }));
+    updatePoints();
 }
 
 
@@ -82,47 +85,51 @@ function stemAnimation()
  */
 function flowerAnimation()
 {
-    if(++scatterCounter % scatterControl === 0 && nth === 0)
+    if(++scatterCounter % scatterControl === 0)
     {
-        Update()
+        //update the variables
+         flowerInnerRadius += deltaFlowerSize;
+        flowerSizeMax += deltaFlowerSize;
+        flowerSizeMin += deltaFlowerSize;
+
+        updatePoints();
     }
 
     for (let i = 0; i < numPetals; i++) {
-        drawAPetal(i, numPetals);
+        drawAPetal(i);
     }
 }
 
-function drawAPetal(nth, numPoints)
-{  
-    push(); 
-    // Calculate current angle
-    let angle = TWO_PI * nth / numPoints;
+function updatePoints()
+{
+    for (let i = 0; i < numPetals; i++) {
+        // Calculate current angle
+        let angle = TWO_PI * i / numPetals;
 
-    // Starting point (inner circle)
-    let x_start = canvasW/2 + cos(angle) * flowerInnerRadius;
-    let y_start = flowerCenterY + sin(angle) * flowerInnerRadius;
+        // Starting point (inner circle)
+        let x_start = canvasW/2 + cos(angle) * flowerInnerRadius;
+        let y_start = flowerCenterY + sin(angle) * flowerInnerRadius;
+        innerPoints[i].x=x_start;
+        innerPoints[i].y=y_start;
 
-    //control the expanding remainder calculation
-    //only increase the radius if time is up
-    
-    {
-         flowerOuterRadius = flowerInnerRadius + random(flowerSizeMin, flowerSizeMax);
+        flowerOuterRadius = flowerInnerRadius + random(flowerSizeMin, flowerSizeMax);
         // End point (larger circle)
         let x_end = canvasW/2 + cos(angle) * flowerOuterRadius;
         let y_end = flowerCenterY + sin(angle) * flowerOuterRadius;
         //Save the points so it draws the same lines before the next expand
-        outerPoints[nth].x = x_end;
-        outerPoints[nth].y = y_end;
-        flowerInnerRadius += deltaFlowerSize;
-        flowerSizeMax += deltaFlowerSize;
-        flowerSizeMin += deltaFlowerSize;
+        outerPoints[i].x = x_end;
+        outerPoints[i].y = y_end;
     }
+}
 
-
+function drawAPetal(nth)
+{  
+    push(); 
+    
     //draw the line
     stroke("#FFFFFF");
     strokeWeight(6);
-    line(x_start, y_start, outerPoints[nth].x, outerPoints[nth].y);
+    line(innerPoints[nth].x, innerPoints[nth].y, outerPoints[nth].x, outerPoints[nth].y);
     pop();
 }
 
