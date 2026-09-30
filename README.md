@@ -41,6 +41,7 @@ Click to change the size of the light.
 #### Fireworks
 
 The mouse position will influence the color.
+
 ![Fireworks](images/fireworks.gif)
 
 [Page](https://kikiisong.github.io/CART253_New/prototypes/variables/fireworks/) | 
