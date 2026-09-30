@@ -2,7 +2,7 @@
  * Fireworks
  * Kiki
  * 
- * Loop of a fireworks animation
+ * A fireworks animation
  */
 
 "use strict";
