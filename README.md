@@ -40,7 +40,7 @@ Click to change the size of the light.
 
 #### Fireworks
 
-The mouse position will influence the color.
+The mouse position will influence the color sometimes.
 
 ![Fireworks](images/fireworks.gif)
 
