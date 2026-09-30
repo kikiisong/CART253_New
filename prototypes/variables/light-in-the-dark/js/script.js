@@ -35,8 +35,8 @@ function torchlight()
 {
     push();
     noStroke();
-    let myGradient = drawingContext.createRadialGradient(mouseX, mouseY, torch.innerCircle, mouseX, mouseY, torch.size);
     //create the torchlight gradient
+    let myGradient = drawingContext.createRadialGradient(mouseX, mouseY, torch.innerCircle, mouseX, mouseY, torch.size);
     myGradient.addColorStop(0, "white");
     myGradient.addColorStop(0.2, "rgba(255,255,255,0.15)");
     myGradient.addColorStop(0.4, "rgba(0,0,0,0.05)");
@@ -48,7 +48,7 @@ function torchlight()
     pop();
 }
 
-// click = increase to the max and decrease
+// click = increase to the max and then decrease to min
 function mousePressed()
 {
     torch.size+=torch.deltaSize;
