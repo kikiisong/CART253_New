@@ -1,24 +1,42 @@
 /**
- * Title of Project
- * Author Name
+ * Choose Your Fighter
+ * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Pick Your Fav!
  */
 
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Set up the canvas
 */
 function setup() {
-
+    createCanvas(500, 600);
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * Draw components
 */
 function draw() {
+    background("#5fbcfa");
+    //buttons to go to next/previous character
+    drawArrows();
+    //current character
+    drawCharacter();
+}
+
+// draw left & right arrow
+// on click, update the current character index
+function drawArrows()
+{
 
 }
+
+// draw character based on current index
+// one of the character is 3d and can be dragged 
+function drawCharacter()
+{
+
+}
+
