@@ -7,25 +7,15 @@
 
 "use strict";
 
-let frontImg = undefined;
+let frontImg;
 
 const cartonMeasures = {
     boxWidth: 160,
     boxHeight: 180,
     boxDepth: 160,
-    roofHeight:90,
+    roofHeight: 90,
     extraHeight: 10
 };
-
-//load images
-async function preload() {
-    console.log("preloaded");
-    frontImg = await loadImage(
-    "assets/images/melon_front.png",
-    () => console.log("LOADED"),
-    () => console.log("FAILED")
-  );
-}
 
 /**
  * Set up the canvas
@@ -33,7 +23,9 @@ async function preload() {
 async function setup() {
     createCanvas(500, 600, WEBGL);
     angleMode(DEGREES);
-    await preload();
+
+    //load image
+    frontImg = await loadImage("assets/images/melon_front.png");
 }
 
 
@@ -41,10 +33,7 @@ async function setup() {
  * Draw components
 */
 function draw() {
-    console.log(frontImg);
-    console.log(frontImg.width, frontImg.height);
     background("#5fbcfa");
-    image(frontImg, 0, 0);
     //buttons to go to next/previous character
     drawArrows();
     orbitControl();
@@ -54,75 +43,125 @@ function draw() {
 
 // draw left & right arrow
 // on click, update the current character index
-function drawArrows()
-{
+function drawArrows() {
 
 }
 
 // draw character based on current index
 // one of the character is 3d and can be dragged 
-function drawCharacter()
-{
-    drawPyramid();
+function drawCharacter() {
+    drawFront();
+    drawBox();
+    //drawRoof();
 }
 
-function drawPyramid()
-{
-
-        let carton = buildGeometry(() => {
-        //Body
-        box(cartonMeasures.boxWidth, cartonMeasures.boxHeight, cartonMeasures.boxDepth);
-
-        texture(frontImg);
-        beginShape();
-        vertex(-cartonMeasures.boxWidth/2, cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2,0,1);
-        vertex(cartonMeasures.boxWidth/2, cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2,1,1);
-        vertex(cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2,1,0);
-        vertex(-cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2,0,0);
-        endShape(CLOSE);
-
-
-        //Roofs
-        //front
+function drawFront(){
+      let w = cartonMeasures.boxWidth;
+    let h = cartonMeasures.boxHeight;
+    let d = cartonMeasures.boxDepth;
+        // Front
+    push();
+    textureMode(NORMAL);
+    texture(frontImg);
     beginShape();
-    vertex(-cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2);
-    vertex(cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), cartonMeasures.boxDepth/2);
+    vertex(-w / 2, -h / 2, d / 2, 0, 0);
+    vertex(w / 2, -h / 2, d / 2, 1, 0);
+    vertex(w / 2, h / 2, d / 2, 1, 1);
+    vertex(-w / 2, h / 2, d / 2, 0, 1);
+    endShape(CLOSE);
+    pop();
+}
+function drawBox() {
+
+    let w = cartonMeasures.boxWidth;
+    let h = cartonMeasures.boxHeight;
+    let d = cartonMeasures.boxDepth;
+
+
+    push();
+    // Back
+    fill("#ffffff");
+    beginShape();
+    vertex(w / 2, -h / 2, -d / 2);
+    vertex(-w / 2, -h / 2, -d / 2);
+    vertex(-w / 2, h / 2, -d / 2);
+    vertex(w / 2, h / 2, -d / 2);
     endShape(CLOSE);
 
-    //back
+    // Left
     beginShape();
-    vertex(-cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, -cartonMeasures.boxDepth/2);
-    vertex(cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, -cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), -cartonMeasures.boxDepth/2);
+   fill("#98f17e");
+    vertex(-w / 2, -h / 2, -d / 2);
+    vertex(-w / 2, -h / 2, d / 2);
+    vertex(-w / 2, h / 2, d / 2);
+    vertex(-w / 2, h / 2, -d / 2);
     endShape(CLOSE);
 
-    //left
+    // Right
     beginShape();
-    vertex(-cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), -cartonMeasures.boxDepth/2);
-    vertex(-cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, -cartonMeasures.boxDepth/2);
+    vertex(w / 2, -h / 2, d / 2);
+    vertex(w / 2, -h / 2, -d / 2);
+    vertex(w / 2, h / 2, -d / 2);
+    vertex(w / 2, h / 2, d / 2);
     endShape(CLOSE);
 
-    //right
+    // Bottom
+    fill("#ffffff");
     beginShape();
-    vertex(cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), -cartonMeasures.boxDepth/2);
-    vertex(cartonMeasures.boxWidth/2, -cartonMeasures.boxHeight/2, -cartonMeasures.boxDepth/2);
+    vertex(-w / 2, h / 2, d / 2);
+    vertex(w / 2, h / 2, d / 2);
+    vertex(w / 2, h / 2, -d / 2);
+    vertex(-w / 2, h / 2, -d / 2);
+    endShape(CLOSE);
+    pop();
+
+}
+
+function drawRoof() {
+    let w = cartonMeasures.boxWidth;
+    let h = cartonMeasures.boxHeight;
+    let d = cartonMeasures.boxDepth;
+    let roofH = cartonMeasures.roofHeight;
+    let extraH = cartonMeasures.extraHeight;
+
+    push();
+    // Front
+    beginShape();
+    vertex(-w / 2, -h / 2, d / 2);
+    vertex(w / 2, -h / 2, d / 2);
+    vertex(0, -(h / 2 + roofH), d / 2);
     endShape(CLOSE);
 
-    //little extra piece
+    // Back
     beginShape();
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight+cartonMeasures.extraHeight), cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight+cartonMeasures.extraHeight), -cartonMeasures.boxDepth/2);
-    vertex(0, -(cartonMeasures.boxHeight/2+cartonMeasures.roofHeight), -cartonMeasures.boxDepth/2);
+    vertex(-w / 2, -h / 2, -d / 2);
+    vertex(w / 2, -h / 2, -d / 2);
+    vertex(0, -(h / 2 + roofH), -d / 2);
     endShape(CLOSE);
 
-    });
+    // Left
+    beginShape();
+    vertex(-w / 2, -h / 2, d / 2);
+    vertex(0, -(h / 2 + roofH), d / 2);
+    vertex(0, -(h / 2 + roofH), -d / 2);
+    vertex(-w / 2, -h / 2, -d / 2);
+    endShape(CLOSE);
 
-    model(carton);
+    // Right
+    beginShape();
+    vertex(w / 2, -h / 2, d / 2);
+    vertex(0, -(h / 2 + roofH), d / 2);
+    vertex(0, -(h / 2 + roofH), -d / 2);
+    vertex(w / 2, -h / 2, -d / 2);
+    endShape(CLOSE);
+
+    // Little extra piece
+    beginShape();
+    vertex(0, -(h / 2 + roofH), d / 2);
+    vertex(0, -(h / 2 + roofH + extraH), d / 2);
+    vertex(0, -(h / 2 + roofH + extraH), -d / 2);
+    vertex(0, -(h / 2 + roofH), -d / 2);
+    endShape(CLOSE);
+    pop();
 }
 
