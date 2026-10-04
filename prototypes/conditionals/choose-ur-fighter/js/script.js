@@ -52,14 +52,14 @@ function drawArrows() {
 function drawCharacter() {
     drawFront();
     drawBox();
-    //drawRoof();
+    drawRoof();
 }
 
-function drawFront(){
-      let w = cartonMeasures.boxWidth;
+function drawFront() {
+    let w = cartonMeasures.boxWidth;
     let h = cartonMeasures.boxHeight;
     let d = cartonMeasures.boxDepth;
-        // Front
+    // Front
     push();
     textureMode(NORMAL);
     texture(frontImg);
@@ -90,7 +90,7 @@ function drawBox() {
 
     // Left
     beginShape();
-   fill("#98f17e");
+    fill("#98f17e");
     vertex(-w / 2, -h / 2, -d / 2);
     vertex(-w / 2, -h / 2, d / 2);
     vertex(-w / 2, h / 2, d / 2);
@@ -126,6 +126,7 @@ function drawRoof() {
 
     push();
     // Front
+    fill("#ffffff");
     beginShape();
     vertex(-w / 2, -h / 2, d / 2);
     vertex(w / 2, -h / 2, d / 2);
@@ -140,6 +141,7 @@ function drawRoof() {
     endShape(CLOSE);
 
     // Left
+    fill("#98f17e");
     beginShape();
     vertex(-w / 2, -h / 2, d / 2);
     vertex(0, -(h / 2 + roofH), d / 2);
@@ -156,6 +158,7 @@ function drawRoof() {
     endShape(CLOSE);
 
     // Little extra piece
+    fill("#ffffff");
     beginShape();
     vertex(0, -(h / 2 + roofH), d / 2);
     vertex(0, -(h / 2 + roofH + extraH), d / 2);
