@@ -7,7 +7,16 @@
 
 "use strict";
 
+const canvasW = 500;
+const canvasH = 600;
+
 let frontImg;
+
+const arrow = {
+    base: 40,
+    height: 20,
+    gap: 20
+};
 
 const cartonMeasures = {
     boxWidth: 160,
@@ -21,11 +30,12 @@ const cartonMeasures = {
  * Set up the canvas
 */
 async function setup() {
-    createCanvas(500, 600, WEBGL);
+    createCanvas(canvasW, canvasH, WEBGL);
     angleMode(DEGREES);
 
     //load image
     frontImg = await loadImage("assets/images/melon_front.png");
+
 }
 
 
@@ -34,17 +44,35 @@ async function setup() {
 */
 function draw() {
     background("#5fbcfa");
-    //buttons to go to next/previous character
-    drawArrows();
+
     orbitControl();
     //current character
     drawCharacter();
+
+    //buttons to go to next/previous character
+    drawArrows();
+
 }
 
 // draw left & right arrow
 // on click, update the current character index
 function drawArrows() {
+    push();
 
+    //reset transforms, camera and perspective to make sure the arrows don't rotate with the 3d character
+    resetMatrix();                 
+    camera();                      
+    perspective(); 
+    let gl = drawingContext;
+    gl.disable(gl.DEPTH_TEST);
+
+    noStroke();
+    fill("#dccd82")
+    triangle(-canvasW / 2 + arrow.gap + arrow.height, arrow.base / 2, -canvasW / 2 + arrow.gap + arrow.height, -arrow.base / 2, -canvasW / 2 + arrow.gap, 0);
+    triangle(canvasW / 2 - arrow.gap - arrow.height, arrow.base / 2, canvasW / 2 - arrow.gap - arrow.height, -arrow.base / 2, canvasW / 2 - arrow.gap, 0);
+    
+    gl.enable(gl.DEPTH_TEST);
+    pop();
 }
 
 // draw character based on current index
@@ -168,3 +196,21 @@ function drawRoof() {
     pop();
 }
 
+function isPrevious() {
+  return mouseX >= arrow.gap && mouseX <= arrow.gap + arrow.height &&
+         mouseY >= canvasH/2-arrow.base / 2 && mouseY <= canvasH+arrow.base / 2;
+}
+
+function isNext() {
+  return mouseX >= canvasW - arrow.gap - arrow.height && mouseX <= canvasW -arrow.gap &&
+         mouseY >= canvasH/2-arrow.base / 2 && mouseY <= canvasH+arrow.base / 2;
+}
+
+function mouseClicked() {
+  if (isPrevious()) {
+    console.log("prev");
+  }else if(isNext())
+  {
+    console.log("next");
+  }
+}
