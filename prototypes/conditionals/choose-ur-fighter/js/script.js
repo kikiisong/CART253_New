@@ -10,7 +10,24 @@
 const canvasW = 500;
 const canvasH = 600;
 
-let frontImg;
+let characterIndex = 0;
+const characters = [
+    {
+        name: "Melon",
+        imgPath: "assets/images/melon_front.png",
+        img: undefined
+    },
+    {
+        name: "Strawberry",
+        imgPath: "assets/images/strawberry_front.png",
+        img: undefined
+    },
+     {
+        name: "Chocolate",
+        imgPath: "assets/images/chocolate_front.png",
+        img: undefined
+    }
+];
 
 const arrow = {
     base: 40,
@@ -34,7 +51,10 @@ async function setup() {
     angleMode(DEGREES);
 
     //load image
-    frontImg = await loadImage("assets/images/melon_front.png");
+    for(let i =0; i<characters.length; i++)
+    {
+        characters[i].img=await loadImage(characters[i].imgPath);
+    }
 
 }
 
@@ -90,7 +110,9 @@ function drawFront() {
     // Front
     push();
     textureMode(NORMAL);
-    texture(frontImg);
+    console.log(characters);
+    console.log(characterIndex);
+    texture(characters[characterIndex].img);
     beginShape();
     vertex(-w / 2, -h / 2, d / 2, 0, 0);
     vertex(w / 2, -h / 2, d / 2, 1, 0);
@@ -209,8 +231,10 @@ function isNext() {
 function mouseClicked() {
   if (isPrevious()) {
     console.log("prev");
+    characterIndex--;
   }else if(isNext())
   {
     console.log("next");
+    characterIndex++;
   }
 }
