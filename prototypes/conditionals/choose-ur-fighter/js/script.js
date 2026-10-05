@@ -15,17 +15,20 @@ const characters = [
     {
         name: "Melon",
         imgPath: "assets/images/melon_front.png",
-        img: undefined
+        img: undefined,
+        color: "#98f17e"
     },
     {
         name: "Strawberry",
         imgPath: "assets/images/strawberry_front.png",
-        img: undefined
+        img: undefined,
+        color: "#edbaf7"
     },
      {
         name: "Chocolate",
         imgPath: "assets/images/chocolate_front.png",
-        img: undefined
+        img: undefined,
+        color: "#33261d"
     }
 ];
 
@@ -140,7 +143,7 @@ function drawBox() {
 
     // Left
     beginShape();
-    fill("#98f17e");
+    fill(characters[characterIndex].color);
     vertex(-w / 2, -h / 2, -d / 2);
     vertex(-w / 2, -h / 2, d / 2);
     vertex(-w / 2, h / 2, d / 2);
@@ -191,7 +194,7 @@ function drawRoof() {
     endShape(CLOSE);
 
     // Left
-    fill("#98f17e");
+    fill(characters[characterIndex].color);
     beginShape();
     vertex(-w / 2, -h / 2, d / 2);
     vertex(0, -(h / 2 + roofH), d / 2);
