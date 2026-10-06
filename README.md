@@ -19,6 +19,34 @@
 [Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
 ## Prototype 
+### Conditionals
+#### Mushroooom
+
+Collect the red yummy mushroom and the next one will appear.
+
+![Mushroom](images/mushroom.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/conditionals/mushroom/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/conditionals/mushroom)
+
+#### Gacha Machine
+
+Turn(Click) the knob to test your luck!
+
+![Gacha Machine](images/gacha-machine.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/conditionals/gacha-machine/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/conditionals/gacha-machine)
+
+#### Choose Ur Fighter (Flavored Milk Version)
+
+Pick your fav fighter(flavor)!
+
+![Gacha Machine](images/milk-carton.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/conditionals/choose-ur-fighter/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/conditionals/choose-ur-fighter)
+
 ### Variables
 #### Juicyyy
 
