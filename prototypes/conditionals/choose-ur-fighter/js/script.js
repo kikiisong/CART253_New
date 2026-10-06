@@ -10,7 +10,9 @@
 const canvasW = 500;
 const canvasH = 600;
 
+// current character index
 let characterIndex = 0;
+// array of avaiable characters
 const characters = [
     {
         name: "Melon",
@@ -32,12 +34,14 @@ const characters = [
     }
 ];
 
+// measurements for the next and previous arrow buttons
 const arrow = {
     base: 40,
     height: 20,
     gap: 20
 };
 
+// measurements for the character(s) - milk carton
 const cartonMeasures = {
     boxWidth: 160,
     boxHeight: 180,
@@ -51,9 +55,8 @@ const cartonMeasures = {
 */
 async function setup() {
     createCanvas(canvasW, canvasH, WEBGL);
-    angleMode(DEGREES);
 
-    //load image
+    //load image for each character in the array
     for(let i =0; i<characters.length; i++)
     {
         characters[i].img=await loadImage(characters[i].imgPath);
@@ -68,6 +71,7 @@ async function setup() {
 function draw() {
     background("#5fbcfa");
 
+    //turn on the mouse control for 3d objects (character)
     orbitControl();
     //current character
     drawCharacter();
@@ -90,9 +94,18 @@ function drawArrows() {
     gl.disable(gl.DEPTH_TEST);
 
     noStroke();
-    fill("#dccd82")
-    triangle(-canvasW / 2 + arrow.gap + arrow.height, arrow.base / 2, -canvasW / 2 + arrow.gap + arrow.height, -arrow.base / 2, -canvasW / 2 + arrow.gap, 0);
-    triangle(canvasW / 2 - arrow.gap - arrow.height, arrow.base / 2, canvasW / 2 - arrow.gap - arrow.height, -arrow.base / 2, canvasW / 2 - arrow.gap, 0);
+    fill("#dccd82");
+    //only display the left arrow if not the first character in array
+    if(characterIndex>0)
+    {
+        triangle(-canvasW / 2 + arrow.gap + arrow.height, arrow.base / 2, -canvasW / 2 + arrow.gap + arrow.height, -arrow.base / 2, -canvasW / 2 + arrow.gap, 0);
+    }
+    //only display right arrow if not the last character in array
+    if(characterIndex < characters.length-1)
+    {
+        triangle(canvasW / 2 - arrow.gap - arrow.height, arrow.base / 2, canvasW / 2 - arrow.gap - arrow.height, -arrow.base / 2, canvasW / 2 - arrow.gap, 0);
+    
+    }
     
     gl.enable(gl.DEPTH_TEST);
     pop();
@@ -101,11 +114,15 @@ function drawArrows() {
 // draw character based on current index
 // one of the character is 3d and can be dragged 
 function drawCharacter() {
+    //separate each faces individually instead of drawing just a box
+    // to give different textures/colors to each face
     drawFront();
     drawBox();
     drawRoof();
 }
 
+// draw front of the carton box
+// use an image as texture
 function drawFront() {
     let w = cartonMeasures.boxWidth;
     let h = cartonMeasures.boxHeight;
@@ -113,8 +130,7 @@ function drawFront() {
     // Front
     push();
     textureMode(NORMAL);
-    console.log(characters);
-    console.log(characterIndex);
+
     texture(characters[characterIndex].img);
     beginShape();
     vertex(-w / 2, -h / 2, d / 2, 0, 0);
@@ -124,6 +140,8 @@ function drawFront() {
     endShape(CLOSE);
     pop();
 }
+
+// draw the rest of the box with solid colors
 function drawBox() {
 
     let w = cartonMeasures.boxWidth;
@@ -170,6 +188,7 @@ function drawBox() {
 
 }
 
+// draw the roofs with solid colors
 function drawRoof() {
     let w = cartonMeasures.boxWidth;
     let h = cartonMeasures.boxHeight;
@@ -221,23 +240,30 @@ function drawRoof() {
     pop();
 }
 
+// return if clicked position is within the previous button area
 function isPrevious() {
   return mouseX >= arrow.gap && mouseX <= arrow.gap + arrow.height &&
          mouseY >= canvasH/2-arrow.base / 2 && mouseY <= canvasH+arrow.base / 2;
 }
 
+// return if clicked position is within the next button area
 function isNext() {
   return mouseX >= canvasW - arrow.gap - arrow.height && mouseX <= canvasW -arrow.gap &&
          mouseY >= canvasH/2-arrow.base / 2 && mouseY <= canvasH+arrow.base / 2;
 }
 
+
 function mouseClicked() {
-  if (isPrevious()) {
-    console.log("prev");
+    //only click if previous/next arrow is showing up
+  if (characterIndex > 0 && isPrevious()) {
     characterIndex--;
-  }else if(isNext())
+    // resets camera if character switched
+    camera();
+  }
+  else if(characterIndex < characters.length-1 && isNext())
   {
-    console.log("next");
     characterIndex++;
+    // resets camera if character switched
+    camera();
   }
 }
