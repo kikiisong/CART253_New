@@ -1,8 +1,8 @@
 /**
- * Walk Walk Walk
+ * Mushrooooom
  * Kiki
  * 
- * Collect the yummy mushrooms and avoid the poisonous ones!
+ * Collect the yummy mushrooms!
  */
 
 "use strict";
@@ -96,7 +96,6 @@ function drawMushroom() {
 
 function checkCollision()
 {
-    console.log("check")
     if(dist(mushroom.x, mushroom.y, character.x, character.y) < mushroom.r)
     {
         mushroom.toUpdate = true;
