@@ -7,18 +7,35 @@
 
 "use strict";
 
+//define the key controls
+const padKeys = 'qweasdzxc';
+
+//define the pad variable
 let pad = {
     size: 100,
     x: 50,
     y: 500,
-    beats: [],
+    beats: Array(9).fill(null),
     flash: Array(9).fill(0)
 }
+
+//the list of .wav file names
+const beatNames = [
+  'kick', 'snare', 'hihat',
+  'openhat', 'clap', 'tom',
+  'perc', 'cowbell', 'crash'
+];
+
+
 /**
  * Setting up the canvas
 */
-function setup() {
+async function setup() {
     createCanvas(900, 900);
+    // load beats
+    for (let i = 0; i < pad.beats.length; i++) {
+        pad.beats[i] = await loadSound(`assets/sounds/${beatNames[i]}-808.wav`);
+  }
 }
 
 
@@ -40,13 +57,12 @@ function drawPads() {
     }
 }
 
-function mousePressed() {
-    userStartAudio();
-    const c = floor((mouseX - pad.x) / pad.size);
-    const r = floor((mouseY - pad.y) / pad.size);
-    if (c >= 0 && c < 3 && r >= 0 && r < 3) {
-        const i = r * 3 + c;
-        //pad.beats[i].play();
-        pad.flash[i] = millis();
-    }
+function keyPressed() {
+  userStartAudio();
+  const i = padKeys.indexOf(key.toLowerCase());
+  if (i !== -1) {
+    pad.beats[i].play();
+    pad.flash[i] = millis();
+  }
 }
+
