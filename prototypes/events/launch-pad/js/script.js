@@ -93,4 +93,3 @@ function keyPressed() {
         paint.circle(random(size / 2, canvasW - size / 2), random(size / 2, paintH - size / 2), size);
     }
 }
-
