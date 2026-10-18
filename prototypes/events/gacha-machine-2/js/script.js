@@ -25,13 +25,16 @@ const knob = {
 
 const capsule = {
     size: 20,
-}
+};
+
+const sparkles = [];
 
 /**
  * Set up canvas
 */
 function setup() {
     createCanvas(canvasW, canvasH);
+    initSparkles(16);
 }
 
 
@@ -61,24 +64,56 @@ function drawMachine() {
     pop();
 }
 
+// Initialize sparkle array
+function initSparkles(numSparkles) {
+    for (let i = 0; i < numSparkles; i++) {
+        const a = random(TWO_PI);
+        const d = random(-globe.radius, globe.radius);
+        sparkles.push({
+            x: globe.centerX + cos(a) * d,
+            y: globe.centerY + sin(a) * d,
+            size: random(3, 7),
+            speed: random(0.001, 0.003), // how fast the blinking cycle is
+            phase: random(TWO_PI) // when blinking cycle starts
+        });
+    }
+}
+
 /**
  * Draw the capsule container as a large crystal ball
  */
 function drawCrystalBall() {
+    // for clipping
+    const ctx = drawingContext;
+
     push();
-    noFill();
-    //outline
-    stroke("#474961");
-    strokeWeight(5);
-    ellipse(globe.centerX, globe.centerY, globe.radius * 2, globe.radius * 2);
-    //inner glow
-    stroke("#9597a97f");
-    strokeWeight(12);
-    ellipse(globe.centerX, globe.centerY, globe.radius * 2 - 12, globe.radius * 2 - 12);
-    //highlight
+    ctx.save();
+
+    ctx.beginPath();
+    //create 3d effect gradient
+    let g = ctx.createRadialGradient(globe.centerX - globe.radius * 0.3, globe.centerY - globe.radius * 0.3, globe.radius * 0.1, globe.centerX, globe.centerY, globe.radius);
+    g.addColorStop(0, '#6a4a9e');
+    g.addColorStop(1, '#1f1338');
+    ctx.fillStyle = g;
+    // draw ball
+    ctx.arc(globe.centerX, globe.centerY, globe.radius, 0, TWO_PI);
+    ctx.fill();
+    // clips everything in the ball
+    ctx.clip();
+
+    //sparkles
     noStroke();
-    fill("#d3d3f4f0");
-    ellipse(globe.centerX - 70, globe.centerY - 80, 50, 50);
+    for (const s of sparkles) {
+        //keeps brightness >=0 and gives shorter max brightness (blink)
+        const brightness = pow(max(0, sin(millis() * s.speed + s.phase)), 4);
+        //longer break
+        if (brightness < 0.03) continue;
+        fill(255, 255, 255, brightness * 255);
+        star(s.x, s.y, s.size * brightness, s.size * brightness * 0.25);
+    }
+
+    ctx.restore();
+
     pop();
 }
 
@@ -104,16 +139,16 @@ function star(x, y, rOuter, rInner) {
  */
 function drawKnob(angle = 0) {
     push();
-    translate(width/2, 440);
+    translate(width / 2, 440);
     rotate(angle);
 
     //outerstar
     stroke("#fffacf4c");
     strokeWeight(2)
-    fill('#412147'); 
+    fill('#412147');
     star(0, 0, 50, 28, 5);
     // inner star
-    fill('#f6e979'); 
+    fill('#f6e979');
     star(0, 0, 40, 22, 5);
     // center
     noStroke();
