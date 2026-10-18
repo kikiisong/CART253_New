@@ -16,16 +16,23 @@ const machine = {
 
 const globe = {
     centerX: canvasW / 2,
-    centerY: 190,
+    centerY: 180,
     radius: 150
 };
 
 const knob = {
+    y: 440,
+    centerSize: 22,
+    outerSize: 50,
+    innerSize: 40,
+    tipLength: 22
 };
 
-const capsule = {
-    size: 20,
-};
+const chute = {
+    y: 520,
+    sizeX: 80,
+    sizeY: 10
+}
 
 const sparkles = [];
 
@@ -47,6 +54,7 @@ function draw() {
     drawMachine();
     drawCrystalBall();
     drawKnob();
+    drawChute();
 }
 
 /**
@@ -139,20 +147,30 @@ function star(x, y, rOuter, rInner) {
  */
 function drawKnob(angle = 0) {
     push();
-    translate(width / 2, 440);
+    translate(globe.centerX, knob.y);
     rotate(angle);
 
-    //outerstar
+    //outer star
     stroke("#fffacf4c");
     strokeWeight(2)
     fill('#412147');
-    star(0, 0, 50, 28, 5);
+    star(0, 0, knob.outerSize, knob.outerSize-knob.tipLength);
     // inner star
     fill('#f6e979');
-    star(0, 0, 40, 22, 5);
+    star(0, 0, knob.innerSize, knob.innerSize-knob.tipLength);
     // center
     noStroke();
-    fill('#add1f5');
-    ellipse(0, 0, 22, 22);
+    fill('#1f1759');
+    ellipse(0, 0, knob.centerSize, knob.centerSize);
+    pop();
+}
+
+function drawChute()
+{
+    push();
+    stroke("#000000");
+    strokeWeight(2);
+    fill('#1b182b');
+    rect(globe.centerX-chute.sizeX/2, chute.y, chute.sizeX, chute.sizeY, 8);
     pop();
 }
