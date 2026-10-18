@@ -11,7 +11,7 @@ const machine = {
     topX: 70,
     topY: 320,
     width: 260,
-    height: 240,
+    height: 240
 };
 
 const globe = {
@@ -20,12 +20,16 @@ const globe = {
     radius: 150
 };
 
+const sparkles = [];
+
 const knob = {
     y: 440,
     centerSize: 22,
     outerSize: 50,
     innerSize: 40,
-    tipLength: 22
+    tipLength: 22,
+    angle: 0,
+    duration: 1500
 };
 
 const chute = {
@@ -34,7 +38,23 @@ const chute = {
     sizeY: 10
 }
 
-const sparkles = [];
+const card = {
+    topWidth: 56,
+    bottomWidth: 80,
+    height: 70,
+    duration: 1000
+};
+
+const state = {
+    idle: 'idle',
+    spinning: 'spinning',
+    dispensing: 'dispensing',
+    available: 'available'
+};
+
+let currentState = state.idle;
+// when the state starts, for animation
+let stateStart = null;
 
 /**
  * Set up canvas
@@ -51,10 +71,13 @@ function setup() {
 function draw() {
     background('#403643');
 
+    updateState();
+    console.log(currentState);
     drawMachine();
     drawCrystalBall();
     drawKnob();
     drawChute();
+    drawCard();
 }
 
 /**
@@ -145,19 +168,20 @@ function star(x, y, rOuter, rInner) {
  * draw star shaped knob
  * the knob rotates for animation effect
  */
-function drawKnob(angle = 0) {
+function drawKnob() {
     push();
     translate(globe.centerX, knob.y);
-    rotate(angle);
+    knob.angle = currentState === state.spinning ? checkProgress(knob.duration) * TWO_PI : 0;
+    rotate(knob.angle);
 
     //outer star
     stroke("#fffacf4c");
     strokeWeight(2)
     fill('#412147');
-    star(0, 0, knob.outerSize, knob.outerSize-knob.tipLength);
+    star(0, 0, knob.outerSize, knob.outerSize - knob.tipLength);
     // inner star
     fill('#f6e979');
-    star(0, 0, knob.innerSize, knob.innerSize-knob.tipLength);
+    star(0, 0, knob.innerSize, knob.innerSize - knob.tipLength);
     // center
     noStroke();
     fill('#1f1759');
@@ -165,12 +189,73 @@ function drawKnob(angle = 0) {
     pop();
 }
 
-function drawChute()
-{
+/**
+ * Draw the chute/dispenser
+ */
+function drawChute() {
     push();
     stroke("#000000");
     strokeWeight(2);
     fill('#1b182b');
-    rect(globe.centerX-chute.sizeX/2, chute.y, chute.sizeX, chute.sizeY, 8);
+    rect(globe.centerX - chute.sizeX / 2, chute.y, chute.sizeX, chute.sizeY, 8);
     pop();
+}
+
+/**
+ * Draw card if dispensed
+ */
+function drawCard() {
+    if (currentState === state.dispensing) {
+
+        const p = constrain((millis() - stateStart) / card.duration, 0, 1);
+        const e = 1 - pow(1 - p, 3);
+
+        const topY = chute.y + chute.sizeY / 2;
+        const topW = card.topWidth * e;
+        const bottomW = card.bottomWidth * e;
+        const h = card.height * e;
+
+        push();
+        stroke('#f3e991');
+        strokeWeight(2);
+        strokeJoin(ROUND);
+        fill('#2c2f46');
+        quad(globe.centerX - topW / 2, topY, globe.centerX + topW / 2, topY, globe.centerX + bottomW / 2, topY + h, globe.centerX - bottomW / 2, topY + h);
+        pop();
+    } else if (currentState === state.available) {
+        const topY = chute.y + chute.sizeY / 2;
+
+        push();
+        stroke('#f3e991');
+        strokeWeight(2);
+        strokeJoin(ROUND);
+        fill('#2c2f46');
+        quad(globe.centerX - card.topWidth / 2, topY, globe.centerX + card.topWidth / 2, topY, globe.centerX + card.bottomWidth / 2, topY + card.height, globe.centerX - card.bottomWidth / 2, topY + card.height);
+        pop();
+    }
+}
+
+function checkProgress(duration) {
+    return constrain((millis() - stateStart) / duration, 0, 1);
+}
+
+function setState(next) {
+    currentState = next;
+    stateStart = millis();
+}
+
+function updateState() {
+    if (currentState === state.spinning && checkProgress(knob.duration) === 1) {
+        setState(state.dispensing);
+    } else if (currentState === state.dispensing && checkProgress(card.duration) === 1) {
+        setState(state.available);
+    }
+}
+
+
+function mousePressed() {
+    const onKnob = dist(mouseX, mouseY, globe.centerX, knob.y) < knob.outerSize;
+    if (currentState === state.idle && onKnob) {
+        setState(state.spinning);
+    }
 }
