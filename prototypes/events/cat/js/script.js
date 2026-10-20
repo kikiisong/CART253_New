@@ -10,6 +10,7 @@
 const canvasW = 500;
 const canvasH = 700;
 const bgColor = '#000000';
+let mouseInside = false;
 
 const direction = {
     left: 'left',
@@ -29,8 +30,11 @@ const cat = {
     facing: direction.right,
     color: '#FFFFFF',
     currentState: state.sitting,
+    stateStart: null,
+    step: 0.1,
     speed: 200,
-    walkStart: null
+    dist: 20,
+    walk1: true
 }
 
 
@@ -38,7 +42,9 @@ const cat = {
  * create canvas
 */
 function setup() {
-    createCanvas(canvasW, canvasH);
+    const c = createCanvas(canvasW, canvasH);
+    c.mouseOver(() => { mouseInside = true; });
+    c.mouseOut(() => { mouseInside = false; });
 }
 
 
@@ -47,19 +53,17 @@ function setup() {
 */
 function draw() {
     background(bgColor);
+
+    updateState();
     if (cat.currentState === state.sitting) {
         drawCatSit();
     } else if (cat.currentState === state.standing) {
         drawCatStand();
     } else {
-        const t = millis() - cat.walkStart;
-
-        //console.log(Math.floor(t / cat.speed) % 2 === 0);
-        if (Math.floor(t / cat.speed) % 2 === 0) {
+        if (cat.walk1)
             drawCatWalk1();
-        } else {
+        else
             drawCatWalk2();
-        }
     }
 }
 
@@ -178,6 +182,42 @@ function drawCatWalk2() {
     // tail
     bezier(-34, -18, -56, -18, -60, -36, -52, -50);
     pop();
+}
+
+
+function setState(newState) {
+    cat.currentState = newState;
+    cat.stateStart = millis();
+}
+
+function updateState() {
+    const elapsed = millis() - cat.stateSince;
+    const dx = mouseX - cat.x;
+    const dy = mouseY - cat.y;
+    const distance = dist(mouseX, mouseY, cat.x, cat.y);
+    const wantsToWalk = mouseInside && distance > cat.dist;
+
+    if (wantsToWalk && Math.abs(dx) > 5) {
+        cat.facing = dx < 0 ? direction.left : direction.right;
+    }
+
+    if (wantsToWalk) {
+        if (cat.currentState === state.sitting)
+            setState(state.standing);
+        else if (cat.currentState === state.standing)
+            setState(state.walking);
+        else {
+            const stepX = dx / distance * cat.step;
+            const stepY = dy / distance * cat.step;
+
+            cat.x += stepX;
+            cat.y += stepY;
+            if (millis() - cat.stateStart >= cat.speed) {
+                cat.walk1 = !cat.walk1;
+                cat.stateStart = millis();
+            }
+        }
+    }
 }
 
 function mousePressed() {
