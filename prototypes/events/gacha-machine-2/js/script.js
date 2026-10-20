@@ -29,7 +29,7 @@ const knob = {
     innerSize: 40,
     tipLength: 22,
     angle: 0,
-    duration: 1500
+    duration: 3000
 };
 
 const chute = {
@@ -141,6 +141,26 @@ function drawCrystalBall() {
     ctx.fill();
     // clips everything in the ball
     ctx.clip();
+
+    // draw glowing effect during spinning
+    if (currentState === state.spinning) {
+        const t = millis() * 0.0002;
+        // change the blend mode for glowing
+        ctx.globalCompositeOperation = 'screen';
+        //5 slightly shifted overlap circles
+        for (let i = 0; i < 5; i++) {
+            const bx = globe.centerX + (noise(i * 10, t) - 0.5) * globe.radius * 1.4;
+            const by = globe.centerY + (noise(i * 10 + 100, t) - 0.5) * globe.radius * 1.4;
+            const br = globe.radius * (0.5 + noise(i * 10 + 200, t) * 0.4);
+            // stays in purple-magenta range
+            const hue = 265 + noise(i * 10 + 300, t) * 40;
+            const bg = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+            bg.addColorStop(0, `hsla(${hue}, 70%, 55%, 0.5)`);
+            bg.addColorStop(1, `hsla(${hue}, 70%, 55%, 0)`);
+            ctx.fillStyle = bg;
+            ctx.fillRect(globe.centerX - globe.radius, globe.centerY - globe.radius, globe.radius * 2, globe.radius * 2);
+        }
+    }
 
     //sparkles
     noStroke();
