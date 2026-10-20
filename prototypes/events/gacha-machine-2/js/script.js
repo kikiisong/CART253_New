@@ -49,7 +49,15 @@ const state = {
     idle: 'idle',
     spinning: 'spinning',
     dispensing: 'dispensing',
-    available: 'available'
+    available: 'available',
+    reveal: 'reveal'
+};
+
+const bigCard = {
+    width: 220,
+    height: 300,
+    duration: 500,
+    img: undefined
 };
 
 let currentState = state.idle;
@@ -59,9 +67,10 @@ let stateStart = null;
 /**
  * Set up canvas
 */
-function setup() {
+async function setup() {
     createCanvas(canvasW, canvasH);
     initSparkles(16);
+    bigCard.img = await loadImage("assets/images/reveal.png");
 }
 
 
@@ -78,6 +87,7 @@ function draw() {
     drawKnob();
     drawChute();
     drawCard();
+    drawReveal();
 }
 
 /**
@@ -207,7 +217,7 @@ function drawChute() {
 function drawCard() {
     if (currentState === state.dispensing) {
 
-        const p = constrain((millis() - stateStart) / card.duration, 0, 1);
+        const p = checkProgress(card.duration);
         const e = 1 - pow(1 - p, 3);
 
         const topY = chute.y + chute.sizeY / 2;
@@ -235,6 +245,36 @@ function drawCard() {
     }
 }
 
+function drawReveal() {
+    if (currentState === state.reveal) {
+        const p = checkProgress(bigCard.duration);
+        const e = 1 - pow(1 - p, 3);
+
+        push();
+        // dim the machine behind the card
+        noStroke();
+        fill(0, 0, 0, 170 * e);
+        rect(0, 0, canvasW, canvasH);
+
+        // revealing transition
+        translate(canvasW / 2, canvasH / 2);
+        scale(e);
+        rectMode(CENTER);
+        stroke('#f3e991');
+        strokeWeight(4);
+        fill('#2c2f46');
+        rect(0, 0, bigCard.width, bigCard.height, 16);
+
+        // show card image 
+        if (p >= 1) {
+            imageMode(CENTER);
+            image(bigCard.img, 0, 0, bigCard.width, bigCard.height);
+        }
+
+        pop();
+    }
+}
+
 function checkProgress(duration) {
     return constrain((millis() - stateStart) / duration, 0, 1);
 }
@@ -252,10 +292,26 @@ function updateState() {
     }
 }
 
+function onCard() {
+    const topY = chute.y + chute.sizeY / 2;
+    const yRatio = (mouseY - topY) / card.height;
+    if (yRatio < 0 || yRatio > 1) return false;
+
+    // the width of the card depends on y
+    const halfW = lerp(card.topWidth, card.bottomWidth, yRatio) / 2;
+    return abs(mouseX - globe.centerX) <= halfW;
+}
+
+function onKnob() {
+    return dist(mouseX, mouseY, globe.centerX, knob.y) < knob.outerSize;
+}
 
 function mousePressed() {
-    const onKnob = dist(mouseX, mouseY, globe.centerX, knob.y) < knob.outerSize;
-    if (currentState === state.idle && onKnob) {
+    if (currentState === state.idle && onKnob()) {
         setState(state.spinning);
+    } else if (currentState === state.available && onCard()) {
+        setState(state.reveal);
+    } else if (currentState === state.reveal) {
+        setState(state.idle);
     }
 }
