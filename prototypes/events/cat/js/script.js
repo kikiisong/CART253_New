@@ -191,7 +191,7 @@ function setState(newState) {
 }
 
 function updateState() {
-    const elapsed = millis() - cat.stateSince;
+    const elapsed = millis() - cat.stateStart;
     const dx = mouseX - cat.x;
     const dy = mouseY - cat.y;
     const distance = dist(mouseX, mouseY, cat.x, cat.y);
@@ -218,13 +218,21 @@ function updateState() {
             }
         }
     }
+    else {
+        if (cat.currentState === state.walking)
+            setState(state.standing);
+        else if (cat.currentState === state.standing) {
+            if(elapsed > 2000)
+                setState(state.sitting);
+        }
+    }
 }
 
-function mousePressed() {
+/*function mousePressed() {
     if (cat.currentState === state.sitting) {
         cat.currentState = state.standing;
     } else if (cat.currentState === state.standing) {
         cat.currentState = state.walking;
         cat.walkStart = millis();
     }
-}
+}*/
