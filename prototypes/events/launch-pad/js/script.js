@@ -10,14 +10,28 @@
 //define the key controls
 const padKeys = 'qweasdzxc';
 
+const board = {
+    x: 10,
+    y: 450,
+    width: 880,
+    height: 450
+}
+
 //define the pad variable
-let pad = {
+const pad = {
     size: 100,
     x: 50,
     y: 500,
     beats: Array(9).fill(null),
     flash: Array(9).fill(0),
     colors: Array(9).fill(null)
+}
+
+const keyboard = {
+    x: 400,
+    y: 500,
+    width: 450,
+    height: 300
 }
 
 //the list of .wav file names
@@ -49,15 +63,27 @@ async function setup() {
     paint.background(20);
 }
 
-
 /**
  * Draw components
 */
 function draw() {
     background(30);
     // show the paint area
-    image(paint, 0, 0); 
+    image(paint, 0, 0);
+
+    drawBoard();
     drawPads();
+    drawKeyboard();
+}
+
+/**
+ * draw the board
+ */
+function drawBoard() {
+    push();
+    fill(10);
+    rect(board.x, board.y, board.width, board.height);
+    pop();
 }
 
 /**
@@ -70,8 +96,26 @@ function drawPads() {
             const i = r * 3 + c;
             fill(millis() - pad.flash[i] < 120 ? pad.colors[i] : 70);
             rect(pad.x + c * pad.size, pad.y + r * pad.size, pad.size - 4, pad.size - 4, 8);
+
+            // key text
+            fill(150);
+            textSize(20);
+            text(padKeys[i], pad.x + (c+1) * pad.size - 20, pad.y + (r+1) * pad.size-20);
+            pop();
         }
     }
+    pop();
+}
+
+function drawKeyboard() {
+    push();
+    fill(50);
+    rect(keyboard.x, keyboard.y, keyboard.width, keyboard.height);
+    // centered text
+    fill(150);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    text("< Keyboard under construction >", keyboard.x + keyboard.width / 2, keyboard.y + keyboard.height / 2);
     pop();
 }
 
