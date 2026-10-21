@@ -2,7 +2,7 @@
  * Launchpad
  * Kiki
  * 
- * A launchpad to practice beat-making
+ * A launchpad to practice beat-making (draw)
  */
 
 "use strict";
@@ -10,6 +10,7 @@
 //define the key controls
 const padKeys = 'qweasdzxc';
 
+// the board that contains the pads and the keyboard
 const board = {
     x: 10,
     y: 450,
@@ -27,6 +28,7 @@ const pad = {
     colors: Array(9).fill(null)
 }
 
+// keyboard...placeholder for now
 const keyboard = {
     x: 400,
     y: 500,
@@ -44,6 +46,7 @@ const beatNames = [
 const canvasW = 900;
 const canvasH = 900;
 const paintH = 400;
+// additional canvas for painting
 let paint;
 
 
@@ -91,6 +94,7 @@ function drawBoard() {
  */
 function drawPads() {
     push();
+    // 3*3 squares
     for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
             const i = r * 3 + c;
@@ -101,12 +105,14 @@ function drawPads() {
             fill(150);
             textSize(20);
             text(padKeys[i], pad.x + (c+1) * pad.size - 20, pad.y + (r+1) * pad.size-20);
-            pop();
         }
     }
     pop();
 }
 
+/**
+ * Draw keyboard placeholder
+ */
 function drawKeyboard() {
     push();
     fill(50);
@@ -134,6 +140,7 @@ function keyPressed() {
         const size = random(20, 70);
         paint.noStroke();
         paint.fill(pad.colors[i]);
+        // avoid circle being cut by the edge
         paint.circle(random(size / 2, canvasW - size / 2), random(size / 2, paintH - size / 2), size);
     }
 }
