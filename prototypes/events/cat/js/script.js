@@ -37,7 +37,7 @@ const cat = {
     color: '#FFFFFF',
     currentState: state.sitting,
     stateStart: null,
-    step: 0.1,
+    step: 1,
     speed: 200,
     dist: 20,
     walk1: true // if cat is in walk 1 pose or walk 2, for animation

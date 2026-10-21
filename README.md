@@ -19,6 +19,35 @@
 [Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
 ## Prototype 
+
+### Events
+#### CAT
+
+CAT is watching you 👀 Get into the Canvas! or out...
+
+![Cat](images/cat.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/cat/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/cat)
+
+#### Gacha Fortune Teller
+
+Get a glimpse into the future...(beta version)
+
+![Gacha 2](images/gacha-machine-2.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/gacha-machine-2/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/gacha-machine-2)
+
+#### Launchpad
+
+Make beats...and paint!
+
+![launchpad](images/launchpad.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/launch-pad/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/launch-pad)
+
 ### Conditionals
 #### Mushroooom
 
