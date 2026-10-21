@@ -2,11 +2,14 @@
  * Gacha Machine 2
  * Kiki
  * 
- * Gacha machine with physics and animation
+ * Wanne take a glimpse into the future? (beta version)
  */
 
 "use strict";
+
 const canvasW = 400, canvasH = 600;
+
+// machine body measurements
 const machine = {
     topX: 70,
     topY: 320,
@@ -14,14 +17,17 @@ const machine = {
     height: 240
 };
 
+// globe measurements
 const globe = {
     centerX: canvasW / 2,
     centerY: 180,
     radius: 150
 };
 
+// sparkles on the globe
 const sparkles = [];
 
+// star shaped knob measurements
 const knob = {
     y: 440,
     centerSize: 22,
@@ -32,12 +38,14 @@ const knob = {
     duration: 3000
 };
 
+// chute measurements
 const chute = {
     y: 520,
     sizeX: 80,
     sizeY: 10
 }
 
+// card (dispensed) measurements
 const card = {
     topWidth: 56,
     bottomWidth: 80,
@@ -45,19 +53,21 @@ const card = {
     duration: 1000
 };
 
+// card (reveal) measurements
+const bigCard = {
+    width: 220,
+    height: 300,
+    duration: 500,
+    img: undefined
+};
+
+// states of the machine
 const state = {
     idle: 'idle',
     spinning: 'spinning',
     dispensing: 'dispensing',
     available: 'available',
     reveal: 'reveal'
-};
-
-const bigCard = {
-    width: 220,
-    height: 300,
-    duration: 500,
-    img: undefined
 };
 
 let currentState = state.idle;
@@ -105,7 +115,9 @@ function drawMachine() {
     pop();
 }
 
-// Initialize sparkle array
+/**
+ * Initialize sparkle array
+ */
 function initSparkles(numSparkles) {
     for (let i = 0; i < numSparkles; i++) {
         const a = random(TWO_PI);
@@ -144,6 +156,7 @@ function drawCrystalBall() {
 
     // draw glowing effect during spinning
     if (currentState === state.spinning) {
+        // time for changing noise
         const t = millis() * 0.0002;
         // change the blend mode for glowing
         ctx.globalCompositeOperation = 'screen';
@@ -232,19 +245,22 @@ function drawChute() {
 }
 
 /**
- * Draw card if dispensed
+ * Draw card if dispensing/dispensed
  */
 function drawCard() {
     if (currentState === state.dispensing) {
 
         const p = checkProgress(card.duration);
+        //ease out
         const e = 1 - pow(1 - p, 3);
 
+        // calculate far the car should come out
         const topY = chute.y + chute.sizeY / 2;
         const topW = card.topWidth * e;
         const bottomW = card.bottomWidth * e;
         const h = card.height * e;
 
+        // draw & outline the quad shape
         push();
         stroke('#f3e991');
         strokeWeight(2);
@@ -253,6 +269,7 @@ function drawCard() {
         quad(globe.centerX - topW / 2, topY, globe.centerX + topW / 2, topY, globe.centerX + bottomW / 2, topY + h, globe.centerX - bottomW / 2, topY + h);
         pop();
     } else if (currentState === state.available) {
+        // draw the full card if available (dispensed but not revealed)
         const topY = chute.y + chute.sizeY / 2;
 
         push();
@@ -265,9 +282,13 @@ function drawCard() {
     }
 }
 
+/**
+ * Draw the card reveal
+ */
 function drawReveal() {
     if (currentState === state.reveal) {
         const p = checkProgress(bigCard.duration);
+        // ease out
         const e = 1 - pow(1 - p, 3);
 
         push();
@@ -276,7 +297,7 @@ function drawReveal() {
         fill(0, 0, 0, 170 * e);
         rect(0, 0, canvasW, canvasH);
 
-        // revealing transition
+        // reveal animation
         translate(canvasW / 2, canvasH / 2);
         scale(e);
         rectMode(CENTER);
@@ -285,7 +306,7 @@ function drawReveal() {
         fill('#2c2f46');
         rect(0, 0, bigCard.width, bigCard.height, 16);
 
-        // show card image 
+        // show card image if animation ended
         if (p >= 1) {
             imageMode(CENTER);
             image(bigCard.img, 0, 0, bigCard.width, bigCard.height);
@@ -295,15 +316,25 @@ function drawReveal() {
     }
 }
 
+/**
+ * controls where the animation is at
+ * */
 function checkProgress(duration) {
     return constrain((millis() - stateStart) / duration, 0, 1);
 }
 
+/**
+ * 
+ * set state of the machine
+ */
 function setState(next) {
     currentState = next;
     stateStart = millis();
 }
 
+/**
+ * update state after animation
+ */
 function updateState() {
     if (currentState === state.spinning && checkProgress(knob.duration) === 1) {
         setState(state.dispensing);
@@ -312,6 +343,10 @@ function updateState() {
     }
 }
 
+/**
+ * 
+ * check if mouse is on the dispensed card
+ */
 function onCard() {
     const topY = chute.y + chute.sizeY / 2;
     const yRatio = (mouseY - topY) / card.height;
@@ -322,10 +357,17 @@ function onCard() {
     return abs(mouseX - globe.centerX) <= halfW;
 }
 
+/**
+ * 
+ * check if mouse is on the knob
+ */
 function onKnob() {
     return dist(mouseX, mouseY, globe.centerX, knob.y) < knob.outerSize;
 }
 
+/**
+ * update state based on mouse pressed input
+ */
 function mousePressed() {
     if (currentState === state.idle && onKnob()) {
         setState(state.spinning);
