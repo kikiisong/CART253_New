@@ -7,22 +7,28 @@
 
 "use strict";
 
+// canvas measurements
 const canvasW = 500;
 const canvasH = 700;
 const bgColor = '#000000';
+
+// global control boolean
 let mouseInside = false;
 
+// directions cat could be facing
 const direction = {
     left: 'left',
     right: 'right'
 };
 
+// states of the cat
 const state = {
     sitting: 'sitting',
     standing: 'standing',
     walking: 'walking'
 }
 
+// cat metadata
 const cat = {
     x: 300,
     y: 300,
@@ -34,7 +40,7 @@ const cat = {
     step: 0.1,
     speed: 200,
     dist: 20,
-    walk1: true
+    walk1: true // if cat is in walk 1 pose or walk 2, for animation
 }
 
 
@@ -54,12 +60,15 @@ function setup() {
 function draw() {
     background(bgColor);
 
+    // check & update state first
     updateState();
+    // draw accordingly
     if (cat.currentState === state.sitting) {
         drawCatSit();
     } else if (cat.currentState === state.standing) {
         drawCatStand();
     } else {
+        // walking animation
         if (cat.walk1)
             drawCatWalk1();
         else
@@ -67,10 +76,15 @@ function draw() {
     }
 }
 
+/**
+ * draw cat sitting
+ */
 function drawCatSit() {
 
     push();
+    // make everything relative to the cat's position
     translate(cat.x, cat.y);
+    // flip if facing left
     scale(cat.facing === direction.left ? -1 : 1, 1);
 
     noStroke();
@@ -92,10 +106,15 @@ function drawCatSit() {
     pop();
 }
 
+/**
+ * draw cat sitting
+ */
 function drawCatStand() {
 
     push();
+    // make everything relative to the cat's position
     translate(cat.x, cat.y);
+    // flip if facing left
     scale(cat.facing === direction.left ? -1 : 1, 1);
 
     noStroke();
@@ -122,10 +141,15 @@ function drawCatStand() {
     pop();
 }
 
+/**
+ * draw cat walking pose 1
+ */
 function drawCatWalk1() {
 
     push();
+    // make everything relative to the cat's position
     translate(cat.x, cat.y);
+    // flip if facing left
     scale(cat.facing === direction.left ? -1 : 1, 1);
 
     noStroke();
@@ -153,10 +177,15 @@ function drawCatWalk1() {
     pop();
 }
 
+/**
+ * draw cat walking pose 2
+ */
 function drawCatWalk2() {
 
     push();
+    // make everything relative to the cat's position
     translate(cat.x, cat.y);
+    // flip if facing left
     scale(cat.facing === direction.left ? -1 : 1, 1);
 
     noStroke();
@@ -184,34 +213,39 @@ function drawCatWalk2() {
     pop();
 }
 
-
+// set state
 function setState(newState) {
     cat.currentState = newState;
     cat.stateStart = millis();
 }
 
+// update state
 function updateState() {
-    const elapsed = millis() - cat.stateStart;
     const dx = mouseX - cat.x;
     const dy = mouseY - cat.y;
     const distance = dist(mouseX, mouseY, cat.x, cat.y);
+    // cat walks if mouse is inside the canvas and far enough from the cat
     const wantsToWalk = mouseInside && distance > cat.dist;
 
+    // update the direction if needed
     if (wantsToWalk && Math.abs(dx) > 5) {
         cat.facing = dx < 0 ? direction.left : direction.right;
     }
 
+    // if cat wants to walk, they go from (sitting -> )standing -> walking
     if (wantsToWalk) {
         if (cat.currentState === state.sitting)
             setState(state.standing);
         else if (cat.currentState === state.standing)
             setState(state.walking);
         else {
+            // gets the direction/velocity the cat wants to walk towards
             const stepX = dx / distance * cat.step;
             const stepY = dy / distance * cat.step;
-
+            // move
             cat.x += stepX;
             cat.y += stepY;
+            // alternating between walking poses
             if (millis() - cat.stateStart >= cat.speed) {
                 cat.walk1 = !cat.walk1;
                 cat.stateStart = millis();
@@ -219,20 +253,14 @@ function updateState() {
         }
     }
     else {
+        // if cat does not want to talk, they go from (walking ->)standing -(2s later and still does not want to)-> sitting
         if (cat.currentState === state.walking)
             setState(state.standing);
         else if (cat.currentState === state.standing) {
+            const elapsed = millis() - cat.stateStart;
             if(elapsed > 2000)
                 setState(state.sitting);
         }
     }
 }
 
-/*function mousePressed() {
-    if (cat.currentState === state.sitting) {
-        cat.currentState = state.standing;
-    } else if (cat.currentState === state.standing) {
-        cat.currentState = state.walking;
-        cat.walkStart = millis();
-    }
-}*/
