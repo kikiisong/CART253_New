@@ -82,17 +82,17 @@ const eye = {
     width: 62,
     length: 70,
     fill: '#ffffff',
-    iris: { 
-        size: 34, 
+    iris: {
+        size: 34,
         color: '#5b84d7'
     },
     pupil: {
-        size: 18, 
-        color: '#141414' 
+        size: 18,
+        color: '#141414'
     },
     highlight: {
-        size: 8, 
-        dx: -5, 
+        size: 8,
+        dx: -5,
         dy: -6,
         color: '#ffffff'
     },
@@ -101,16 +101,32 @@ const eye = {
 };
 
 const brow = {
-  offsetX: 45,
-  y: 210,
-  width: 60,
-  length: 24,
-  thickness: 7,
-  color: '#2b1a04',
-  outerTrim: 0.3, 
-  innerTrim: 0.2,
-  liftMin: -8, // brow offset when the mouse is at the top
-  liftMax: 4, // brow offset when the mouse is at the bottom
+    offsetX: 45,
+    y: 210,
+    width: 60,
+    length: 24,
+    thickness: 7,
+    color: '#2b1a04',
+    outerTrim: 0.3,
+    innerTrim: 0.2,
+    liftMin: -8, // brow offset when the mouse is at the top
+    liftMax: 4, // brow offset when the mouse is at the bottom
+};
+
+const lipsticks = {
+    x: 455,
+    topY: 70,
+    spacing: 160, // distance between neighbouring lipsticks (top)
+    caseWidth: 36,
+    bulletWidth: 26,
+    bulletHeight: 36,
+    slant: 12,
+    collarSize: 12,
+    caseHeight: 52,
+    bottomRadius:6,
+    caseColor: '#171322',
+    collarColor: '#f4ef55',
+    colors: ['#d92222', '#f880f0', '#781b84'],
 };
 
 /**
@@ -140,7 +156,9 @@ function drawPerson() {
     drawNose();
     drawMouth();
     drawEye(face.x - eye.offsetX, eye.y);
-    drawEye(face.x + eye.offsetX, eye.y); 
+    drawEye(face.x + eye.offsetX, eye.y);
+    drawLipsticks();
+    cursor(onLipstick(mouseX, mouseY) !== -1 ? HAND : ARROW);
 }
 
 function drawHead() {
@@ -234,15 +252,62 @@ function drawEye(x, y) {
 }
 
 function drawBrows() {
-  const lift = map(mouseY, 0, height, brow.liftMin, brow.liftMax, true);
-  const y = brow.y + lift;
- 
-  push();
-  stroke(brow.color);
-  strokeWeight(brow.thickness);
-  noFill();
- 
-  arc(face.x - brow.offsetX, y, brow.width, brow.length, PI + brow.outerTrim, TWO_PI - brow.innerTrim);
-  arc(face.x + brow.offsetX, y, brow.width, brow.length, PI + brow.innerTrim, TWO_PI - brow.outerTrim);
-  pop();
+    const lift = map(mouseY, 0, height, brow.liftMin, brow.liftMax, true);
+    const y = brow.y + lift;
+
+    push();
+    stroke(brow.color);
+    strokeWeight(brow.thickness);
+    noFill();
+
+    arc(face.x - brow.offsetX, y, brow.width, brow.length, PI + brow.outerTrim, TWO_PI - brow.innerTrim);
+    arc(face.x + brow.offsetX, y, brow.width, brow.length, PI + brow.innerTrim, TWO_PI - brow.outerTrim);
+    pop();
+}
+
+function drawLipsticks() {
+    for (let i = 0; i < lipsticks.colors.length; i++) {
+        const topY = lipsticks.topY + i * lipsticks.spacing;
+        drawLipstick(lipsticks.x, topY, lipsticks.colors[i]);
+    }
+}
+
+function drawLipstick(x, topY, bulletColor) {
+    const l = lipsticks;
+    const bulletBottom = topY + l.bulletHeight;
+    const collarBottom = bulletBottom + l.collarSize;
+
+    push();
+    noStroke();
+
+    fill(bulletColor);
+    quad(x - l.bulletWidth / 2, topY + l.slant, x + l.bulletWidth / 2, topY, x + l.bulletWidth / 2, bulletBottom, x - l.bulletWidth / 2, bulletBottom);
+
+    fill(l.collarColor);
+    rect(x - l.caseWidth / 2, bulletBottom, l.caseWidth, l.collarSize);
+
+    fill(l.caseColor);
+    rect(x - l.caseWidth / 2, collarBottom, l.caseWidth, l.caseHeight, 0, 0, l.bottomRadius, l.bottomRadius);
+    pop();
+}
+
+// check if x,y overlap with which lipstick
+function onLipstick(x, y) {
+    const halfWidth = lipsticks.caseWidth / 2;
+    for (let i = 0; i < lipsticks.colors.length; i++) {
+        const top = lipsticks.topY + i * lipsticks.spacing;
+        // if x, y is within this lipsticks's width & height, return the index
+        if (x >= lipsticks.x - halfWidth && x <= lipsticks.x + halfWidth && y >= top && y <= top + lipsticks.bulletHeight + lipsticks.collarSize + lipsticks.caseHeight)
+            return i;
+    }
+    return -1;
+}
+
+// mouse interaction
+function mousePressed() {
+    // if mouse on lipstick, change mouth color to clicked lipstick color
+    const i = onLipstick(mouseX, mouseY);
+    if (i !== -1) {
+        mouth.lineColor = lipsticks.colors[i];
+    }
 }
