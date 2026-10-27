@@ -61,10 +61,56 @@ const hair = {
 };
 
 const nose = {
-    y: 275, 
-    width: 15, 
-    length: 35, 
+    y: 283,
+    width: 15,
+    length: 35,
     color: '#e0cbbf'
+};
+
+const mouth = {
+    y: 322,
+    width: 110,
+    length: 70,
+    trim: 0.15,
+    lineColor: '#fac5c5',
+    thickness: 5,
+};
+
+const eye = {
+    offsetX: 45,
+    y: 242,
+    width: 62,
+    length: 70,
+    fill: '#ffffff',
+    iris: { 
+        size: 34, 
+        color: '#5b84d7'
+    },
+    pupil: {
+        size: 18, 
+        color: '#141414' 
+    },
+    highlight: {
+        size: 8, 
+        dx: -5, 
+        dy: -6,
+        color: '#ffffff'
+    },
+    maxLook: 14, // how far the pupil can slide from the eye center
+    lookSpeed: 10, // pupil movement pace
+};
+
+const brow = {
+  offsetX: 45,
+  y: 210,
+  width: 60,
+  length: 24,
+  thickness: 7,
+  color: '#2b1a04',
+  outerTrim: 0.3, 
+  innerTrim: 0.2,
+  liftMin: -8, // brow offset when the mouse is at the top
+  liftMax: 4, // brow offset when the mouse is at the bottom
 };
 
 /**
@@ -89,8 +135,12 @@ function drawPerson() {
     drawBody();
     drawHead();
     drawEars();
+    drawBrows();
     drawBang();
     drawNose();
+    drawMouth();
+    drawEye(face.x - eye.offsetX, eye.y);
+    drawEye(face.x + eye.offsetX, eye.y); 
 }
 
 function drawHead() {
@@ -149,4 +199,50 @@ function drawNose() {
     fill(nose.color);
     triangle(face.x, nose.y - nose.length / 2, face.x - nose.width, nose.y + nose.length / 2, face.x + nose.width, nose.y + nose.length / 2);
     pop();
+}
+
+function drawMouth() {
+    push();
+    stroke(mouth.lineColor);
+    strokeWeight(mouth.thickness);
+    noFill();
+    arc(face.x, mouth.y, mouth.width, mouth.length, mouth.trim, PI - mouth.trim);
+
+    pop();
+}
+
+function drawEye(x, y) {
+    push();
+    noStroke();
+    fill(eye.fill);
+
+    ellipse(x, y, eye.width, eye.length);
+
+    // pupil slides toward the mouse up to a max distance
+    const angle = atan2(mouseY - y, mouseX - x);
+    const reach = min(eye.maxLook, dist(mouseX, mouseY, x, y) / eye.lookSpeed);
+    const px = x + cos(angle) * reach;
+    const py = y + sin(angle) * reach;
+
+    fill(eye.iris.color);
+    circle(px, py, eye.iris.size);
+    fill(eye.pupil.color);
+    circle(px, py, eye.pupil.size);
+    fill(eye.highlight.color);
+    circle(px + eye.highlight.dx, py + eye.highlight.dy, eye.highlight.size);
+    pop();
+}
+
+function drawBrows() {
+  const lift = map(mouseY, 0, height, brow.liftMin, brow.liftMax, true);
+  const y = brow.y + lift;
+ 
+  push();
+  stroke(brow.color);
+  strokeWeight(brow.thickness);
+  noFill();
+ 
+  arc(face.x - brow.offsetX, y, brow.width, brow.length, PI + brow.outerTrim, TWO_PI - brow.innerTrim);
+  arc(face.x + brow.offsetX, y, brow.width, brow.length, PI + brow.innerTrim, TWO_PI - brow.outerTrim);
+  pop();
 }
