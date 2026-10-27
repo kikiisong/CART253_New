@@ -2,8 +2,7 @@
  * CAT
  * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * CAT Always Wins
  */
 
 "use strict";
@@ -233,7 +232,7 @@ function drawUI() {
         text('Oops...You Lost...', width / 2, height / 2 - 10);
 
         textSize(16);
-        text('The Cat Always Wins', width / 2, height / 2 + 35);
+        text('CAT Always Wins', width / 2, height / 2 + 35);
     }
 
     pop();
