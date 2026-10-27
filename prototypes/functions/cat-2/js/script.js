@@ -53,11 +53,20 @@ const you = {
     x: 800,
     y: 300,
     hp: 80,
-    color:'#FFFFFF',
-    currentState: yourState.down
+    color: '#FFFFFF',
+    currentState: yourState.down,
+    stateStart: null,
+    safeInterval: 200,
+    hpLoss: 2
 }
 
-const UI ={
+const bed = {
+    x: 560,
+    y: 274,
+    color: '#ffffff'
+};
+
+const UI = {
     hpBar: {
         x: 500,
         y: 20,
@@ -73,6 +82,8 @@ const UI ={
 function setup() {
     createCanvas(canvasW, canvasH);
     cat.stateDuration = random(1000, 3000);
+    setCatState(catState.sitting);
+    setYourState(yourState.down);
 }
 
 
@@ -86,6 +97,7 @@ function draw() {
     updateState();
     // draw accordingly
     drawCat(cat.currentState);
+    drawBed();
     drawUI();
 }
 
@@ -132,7 +144,7 @@ function drawCat(currentState) {
             line(-30, -4, -30, 20);
             line(-22, -4, -22, 20);
             line(6, -4, 6, 20);
-            line(18, -4, 18, 20);      
+            line(18, -4, 18, 20);
         } else if (cat.currentState === catState.walking) {
             // legs, front crossed
             line(-28, -4, -38, 20);
@@ -144,30 +156,83 @@ function drawCat(currentState) {
     pop();
 }
 
-function updateState(){
-    const elapsed = millis() - cat.stateStart;
-    if(elapsed > cat.stateDuration)
-    {
-        setState(random(catStates));
+function updateState() {
+    const elapsedCat = millis() - cat.stateStart;
+    if (elapsedCat > cat.stateDuration) {
+        setCatState(random(catStates));
+    }
+
+    const elapsedYou = millis() - you.stateStart;
+    if (elapsedYou > you.safeInterval) {
+        if (you.currentState === yourState.down) {
+            you.hp -= you.hpLoss;
+            you.hp = constrain(you.hp, 0, 100);
+            setYourState(yourState.down);
+        } else {
+            you.hp += you.hpLoss;
+            you.hp = constrain(you.hp, 0, 100);
+            setYourState(yourState.up);
+        }
     }
 }
 
-// set state
-function setState(newState) {
+// set cat's state
+function setCatState(newState) {
     cat.currentState = newState;
     cat.stateStart = millis();
     cat.stateDuration = random(1000, 3000);
 }
 
-function drawUI(){
+// set your state
+function setYourState(newState) {
+    you.currentState = newState;
+    you.stateStart = millis();
+}
+
+function drawUI() {
     push();
     noFill();
     strokeWeight(2);
     stroke(UI.hpBar.color);
     rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length, UI.hpBar.height);
-    
+
     noStroke();
     fill(UI.hpBar.color);
-    rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length * (you.hp/ 100), UI.hpBar.height);
+    rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length * (you.hp / 100), UI.hpBar.height);
     pop();
+}
+
+function drawBed() {
+
+    push();
+    translate(bed.x, bed.y);
+    noStroke();
+    fill(bed.color);
+    
+    // frame: base, footboard, headboard
+    rect(0, -34, 320, 22, 4);
+    rect(0, -64, 12, 64, 4);
+    rect(306, -124, 14, 124, 4);
+
+    // mattress
+    rect(10, -56, 296, 22, 6);
+
+    // pillow
+    rect(236, -64, 66, 10, 10);
+
+    // head
+    ellipse(275, -70, 36, 34);
+
+    // comforter
+    rect(14, -72, 240, 36, 16);
+
+    pop();
+}
+
+function mousePressed() {
+    if (you.currentState === yourState.down) {
+        setYourState(yourState.up);
+    } else {
+        setYourState(yourState.down);
+    }
 }
