@@ -12,6 +12,7 @@
 const canvasW = 900;
 const canvasH = 300;
 const bgColor = '#000000';
+let gameEnd = false;
 
 // directions cat could be facing
 const direction = {
@@ -38,6 +39,8 @@ const cat = {
     currentState: catState.sitting,
     stateStart: null,
     stateDuration: null,
+    stateDurationMax: 1100,
+    stateDurationMin: 800,
     step: 1,
     speed: 200,
     dist: 20,
@@ -57,7 +60,9 @@ const you = {
     currentState: yourState.down,
     stateStart: null,
     safeInterval: 200,
-    hpLoss: 2
+    hpLossDown: 2,
+    hpLossCat: 5,
+    cursed: false // you were up and faced the cat once, you need to lie down again to clear the status & able to gain back hp while up again
 }
 
 const bed = {
@@ -77,27 +82,30 @@ const UI = {
 }
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Set up the canvas
 */
 function setup() {
     createCanvas(canvasW, canvasH);
-    cat.stateDuration = random(1000, 3000);
+    //also sets up the initial values of states
+    cat.stateDuration = random(cat.stateDurationMin, cat.stateDurationMax);
     setCatState(catState.sitting);
     setYourState(yourState.up);
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * Draw the components
 */
 function draw() {
     background(bgColor);
 
-    // check & update state first
-    updateState();
-    // draw accordingly
-    drawCat();
-    drawBedPerson();
+    if (!gameEnd) {
+        // check & update state first
+        updateState();
+        // draw accordingly
+        drawCat();
+        drawBedPerson();
+    }
     drawUI();
 }
 
@@ -142,7 +150,7 @@ function drawCat() {
         if (cat.currentState === catState.standing) {
             // legs
             line(-30, -4, -30, 20);
-            line(-22, -4, -22, 20);
+            line(-17, -4, -17, 20);
             line(6, -4, 6, 20);
             line(18, -4, 18, 20);
         } else if (cat.currentState === catState.walking) {
@@ -162,17 +170,28 @@ function updateState() {
         setCatState(random(catStates));
     }
 
+    if (cat.facing === direction.right && you.currentState === yourState.up)
+    {
+        you.cursed = true;
+    }
     const elapsedYou = millis() - you.stateStart;
     if (elapsedYou > you.safeInterval) {
         if (you.currentState === yourState.down) {
-            you.hp -= you.hpLoss;
+            you.hp -= you.hpLossDown;
             you.hp = constrain(you.hp, 0, 100);
             setYourState(yourState.down);
         } else {
-            you.hp += you.hpLoss;
+            if (you.cursed) {
+                you.hp -= you.hpLossCat;
+            } else {
+                you.hp += you.hpLossDown;
+            }
             you.hp = constrain(you.hp, 0, 100);
             setYourState(yourState.up);
         }
+    }
+    if (you.hp === 0) {
+        gameEnd = true;
     }
 }
 
@@ -180,25 +199,43 @@ function updateState() {
 function setCatState(newState) {
     cat.currentState = newState;
     cat.stateStart = millis();
-    cat.stateDuration = random(1000, 3000);
+    cat.stateDuration = random(cat.stateDurationMin, cat.stateDurationMax);
+    cat.facing = random([direction.left, direction.right]);
 }
 
 // set your state
 function setYourState(newState) {
     you.currentState = newState;
     you.stateStart = millis();
+    if (newState === yourState.down)
+    {
+        you.cursed = false;
+    }
 }
 
 function drawUI() {
     push();
-    noFill();
-    strokeWeight(2);
-    stroke(UI.hpBar.color);
-    rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length, UI.hpBar.height);
 
-    noStroke();
-    fill(UI.hpBar.color);
-    rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length * (you.hp / 100), UI.hpBar.height);
+    if (!gameEnd) {
+        noFill();
+        strokeWeight(2);
+        stroke(UI.hpBar.color);
+        rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length, UI.hpBar.height);
+
+        noStroke();
+        fill(UI.hpBar.color);
+        rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length * (you.hp / 100), UI.hpBar.height);
+    } else {
+        fill('#ffffff');
+        textAlign(CENTER, CENTER);
+
+        textSize(48);
+        text('Oops...You Lost...', width / 2, height / 2 - 10);
+
+        textSize(16);
+        text('The Cat Always Wins', width / 2, height / 2 + 35);
+    }
+
     pop();
 }
 
