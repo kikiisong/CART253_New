@@ -83,7 +83,7 @@ function setup() {
     createCanvas(canvasW, canvasH);
     cat.stateDuration = random(1000, 3000);
     setCatState(catState.sitting);
-    setYourState(yourState.down);
+    setYourState(yourState.up);
 }
 
 
@@ -96,12 +96,12 @@ function draw() {
     // check & update state first
     updateState();
     // draw accordingly
-    drawCat(cat.currentState);
-    drawBed();
+    drawCat();
+    drawBedPerson();
     drawUI();
 }
 
-function drawCat(currentState) {
+function drawCat() {
     push();
     // make everything relative to the cat's position
     translate(cat.x, cat.y);
@@ -202,30 +202,37 @@ function drawUI() {
     pop();
 }
 
-function drawBed() {
+function drawBedPerson() {
 
     push();
     translate(bed.x, bed.y);
     noStroke();
     fill(bed.color);
-    
+
     // frame: base, footboard, headboard
-    rect(0, -34, 320, 22, 4);
+    rect(0, -34, 260, 22, 4);
     rect(0, -64, 12, 64, 4);
-    rect(306, -124, 14, 124, 4);
+    rect(256, -124, 14, 124, 4);
 
     // mattress
-    rect(10, -56, 296, 22, 6);
+    rect(10, -56, 256, 22, 6);
 
     // pillow
-    rect(236, -64, 66, 10, 10);
+    rect(186, -64, 66, 10, 10);
 
-    // head
-    ellipse(275, -70, 36, 34);
-
-    // comforter
-    rect(14, -72, 240, 36, 16);
-
+    if (you.currentState === yourState.up) {
+        // torso
+        rect(180, -120, 42, 70, 16);
+        // head
+        ellipse(191, -136, 36, 34);
+        // comforter
+        rect(14, -72, 168, 36, 16);
+    } else {
+        // head
+        ellipse(215, -80, 36, 34);
+        // comforter
+        rect(14, -72, 193, 36, 16);
+    }
     pop();
 }
 
