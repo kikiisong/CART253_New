@@ -29,6 +29,7 @@ const catState = {
 const catStates = [catState.sitting, catState.standing, catState.walking];
 
 // cat metadata
+// some properties are from previous prototype & for walking animation, which is yet to implement in this version
 const cat = {
     x: 300,
     y: 250,
@@ -46,11 +47,13 @@ const cat = {
     walk1: true // if cat is in walk 1 pose or walk 2, for animation
 }
 
+// player states
 const yourState = {
     down: 'down',
     up: 'up'
 }
 
+// player metadata
 const you = {
     x: 800,
     y: 300,
@@ -58,18 +61,20 @@ const you = {
     color: '#FFFFFF',
     currentState: yourState.down,
     stateStart: null,
-    safeInterval: 200,
-    hpLossDown: 2,
-    hpLossCat: 5,
+    safeInterval: 200, // the speed of hp loss
+    hpLossDown: 2, // hp loss while staying down
+    hpLossCat: 5, // hp loss if cat saw you
     cursed: false // you were up and faced the cat once, you need to lie down again to clear the status & able to gain back hp while up again
 }
 
+// bed metadata
 const bed = {
     x: 560,
     y: 274,
     color: '#ffffff'
 };
 
+// UI metadata
 const UI = {
     hpBar: {
         x: 500,
@@ -88,7 +93,7 @@ function setup() {
     //also sets up the initial values of states
     cat.stateDuration = random(cat.stateDurationMin, cat.stateDurationMax);
     setCatState(catState.sitting);
-    setYourState(yourState.up);
+    setYourState(yourState.down);
 }
 
 
@@ -98,6 +103,7 @@ function setup() {
 function draw() {
     background(bgColor);
 
+    // if not game over, check states and draw everything
     if (!gameEnd) {
         // check & update state first
         updateState();
@@ -108,6 +114,9 @@ function draw() {
     drawUI();
 }
 
+/**
+ * Draw Cat (refactored)
+ */
 function drawCat() {
     push();
     // make everything relative to the cat's position
@@ -118,7 +127,8 @@ function drawCat() {
     noStroke();
     fill(cat.color);
 
-    if (cat.currentState === catState.sitting) {
+    
+    if (cat.currentState === catState.sitting) {// sitting
         // body
         rect(-15, -36, 30, 60, 30, 30, 10, 10);
         // head
@@ -132,7 +142,7 @@ function drawCat() {
         strokeWeight(8);
         strokeCap(ROUND);
         bezier(-13, 18, -34, 26, -42, 8, -34, -12);
-    } else {
+    } else { //standing or walking
         // body
         rect(-36, -28, 64, 30, 15);
         // head
@@ -146,13 +156,13 @@ function drawCat() {
         strokeWeight(8);
         strokeCap(ROUND);
         bezier(-34, -18, -56, -18, -60, -40, -50, -54);
-        if (cat.currentState === catState.standing) {
+        if (cat.currentState === catState.standing) {// standing
             // legs
             line(-30, -4, -30, 20);
             line(-17, -4, -17, 20);
             line(6, -4, 6, 20);
             line(18, -4, 18, 20);
-        } else if (cat.currentState === catState.walking) {
+        } else if (cat.currentState === catState.walking) { // walking
             // legs, front crossed
             line(-28, -4, -38, 20);
             line(-16, -4, -6, 20);
@@ -163,32 +173,43 @@ function drawCat() {
     pop();
 }
 
+/**
+ * Update cat and player status
+ */
 function updateState() {
+    // check elapsed time
     const elapsedCat = millis() - cat.stateStart;
+    // randomly change cat status
     if (elapsedCat > cat.stateDuration) {
         setCatState(random(catStates));
     }
 
+    // if cat facing player (facing right), player gets cursed, more hp lost
+    // can remove curse debuff by going back down
     if (cat.facing === direction.right && you.currentState === yourState.up)
     {
         you.cursed = true;
     }
+    // check elapsed time
     const elapsedYou = millis() - you.stateStart;
+    // hp loss/gain if one interval
     if (elapsedYou > you.safeInterval) {
-        if (you.currentState === yourState.down) {
+        if (you.currentState === yourState.down) {// down = constantly lose small hp
             you.hp -= you.hpLossDown;
             you.hp = constrain(you.hp, 0, 100);
             setYourState(yourState.down);
         } else {
-            if (you.cursed) {
+            if (you.cursed) { // cursed = constantly lose more hp
                 you.hp -= you.hpLossCat;
-            } else {
+            } else { // up & not cursed = constantly gain small hp
                 you.hp += you.hpLossDown;
             }
+            // hp stays in 0-100
             you.hp = constrain(you.hp, 0, 100);
             setYourState(yourState.up);
         }
     }
+    // game end if 0 hp
     if (you.hp === 0) {
         gameEnd = true;
     }
@@ -197,25 +218,33 @@ function updateState() {
 // set cat's state
 function setCatState(newState) {
     cat.currentState = newState;
+    // refresh state start time
     cat.stateStart = millis();
+    // refresh state duration
     cat.stateDuration = random(cat.stateDurationMin, cat.stateDurationMax);
+    // refresh cat's facing direction
     cat.facing = random([direction.left, direction.right]);
 }
 
 // set your state
 function setYourState(newState) {
     you.currentState = newState;
+    // refresh state start time
     you.stateStart = millis();
+    // recover cursed debuff
     if (newState === yourState.down)
     {
         you.cursed = false;
     }
 }
 
+/**
+ * Draw UI
+ */
 function drawUI() {
     push();
 
-    if (!gameEnd) {
+    if (!gameEnd) { // show hp bar
         noFill();
         strokeWeight(2);
         stroke(UI.hpBar.color);
@@ -224,7 +253,7 @@ function drawUI() {
         noStroke();
         fill(UI.hpBar.color);
         rect(UI.hpBar.x, UI.hpBar.y, UI.hpBar.length * (you.hp / 100), UI.hpBar.height);
-    } else {
+    } else { // game over screen
         fill('#ffffff');
         textAlign(CENTER, CENTER);
 
@@ -238,6 +267,9 @@ function drawUI() {
     pop();
 }
 
+/**
+ * Draw player on the bed
+ */
 function drawBedPerson() {
 
     push();
@@ -256,14 +288,14 @@ function drawBedPerson() {
     // pillow
     rect(186, -64, 66, 10, 10);
 
-    if (you.currentState === yourState.up) {
+    if (you.currentState === yourState.up) { // player up
         // torso
         rect(180, -120, 42, 70, 16);
         // head
         ellipse(191, -136, 36, 34);
         // comforter
         rect(14, -72, 168, 36, 16);
-    } else {
+    } else { // player down
         // head
         ellipse(215, -80, 36, 34);
         // comforter
@@ -272,6 +304,9 @@ function drawBedPerson() {
     pop();
 }
 
+/**
+ * mouse clicked = change player state
+ */
 function mousePressed() {
     if (you.currentState === yourState.down) {
         setYourState(yourState.up);
