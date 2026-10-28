@@ -20,6 +20,31 @@
 
 ## Prototype 
 
+### Functions
+#### CAT 2
+
+Sit up, but don't let CAT find out you are awake.
+
+![Cat2](images/cat2.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/cat-2/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/funtions/cat-2)
+
+#### Makeup Salon
+
+![Makeup](images/makeup.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/makeup/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/makeup)
+
+#### Bass
+
+![Bass](images/bass.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/bass/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/bass)
+
+
 ### Events
 #### CAT
 
