@@ -1,6 +1,6 @@
-# TITLE OF PROJECT
+# Cat
 
-AUTHOR NAME
+Kiki
 
 [View this project online](https://kikiisong.github.io/CART253_New/prototypes/functions/cat-2/)
 
