@@ -9,9 +9,12 @@
 const canvasW = 280;
 const canvasH = 1000;
 
+// note names in order
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+// determines if hover shows the note's name, can be turned on/off with spacebar
 let showNotes = false;
 
+// measurements
 const bass = {
     fret: {
         top: 20,
@@ -33,12 +36,13 @@ const bass = {
         x: 10,
         size: 8,
         color: '#49484b',
-        single: [3, 5, 7, 9, 15, 17, 19],
-        double: [12]
+        single: [3, 5, 7, 9, 15, 17, 19], //single dot
+        double: [12] //double dots
     }
 };
 
 let note = null;
+// sound meta
 let osc;
 let stopTimer;
 const noteVolume = 0.8;  // volume while a note plays
@@ -51,7 +55,7 @@ function setup() {
     createCanvas(canvasW, canvasH);
 
     osc = new p5.Oscillator('triangle');
-    osc.amp(0); // starts silent
+    osc.amp(0); // starts silent, or it will constantly play a sound
     osc.start();
 }
 
@@ -65,11 +69,16 @@ function draw() {
     drawMarkers();
     drawStrings();
 
+    // check overlap with which fret
     note = getCellAt(mouseX, mouseY);
     cursor(note ? HAND : ARROW);
+    // draw highlight if hovered
     drawHover(note);
 }
 
+/**
+ * draw frets
+ */
 function drawFrets() {
     push();
     stroke(bass.fret.color);
@@ -82,6 +91,9 @@ function drawFrets() {
     pop();
 }
 
+/**
+ * draw markers
+ */
 function drawMarkers() {
     push();
     noStroke();
@@ -99,6 +111,9 @@ function drawMarkers() {
     pop();
 }
 
+/**
+ * draw strings
+ */
 function drawStrings() {
     const s = bass.string;
 
@@ -126,6 +141,10 @@ function getCellAt(x, y) {
     return null;
 }
 
+/**
+ * 
+ * a semi-transparent rect highlight over the clickable area of a note
+ */
 function drawHover(cell) {
     if (!cell) return;
 
@@ -136,6 +155,7 @@ function drawHover(cell) {
     fill('#ffffff53');
     rect(r.x, r.y, r.w, r.h);
 
+    // if show notes mode on, calculate & draw the node name
     if (showNotes) {
         const name = noteNames[(bass.string.notes[cell.string] + cell.fret) % 12];
         const x = r.x + r.w/2;
@@ -151,6 +171,10 @@ function drawHover(cell) {
     pop();
 }
 
+/**
+ * calculate the rectangle that covers the current hovered note
+ *  
+ */
 function cellRect(string, fret) {
     return {
         x: bass.string.x + (string + 0.5) * bass.string.width - bass.string.width / 2,
@@ -174,6 +198,9 @@ function playNote(string, fret) {
     stopTimer = setTimeout(() => osc.amp(0), noteLength);
 }
 
+/**
+ * play note when clicked on a rectangle
+ */
 function mousePressed() {
     userStartAudio();
 
@@ -183,6 +210,7 @@ function mousePressed() {
     }
 }
 
+// press space to turn on/off show nodes mode
 function keyPressed() {
     if (key === ' ') {
         showNotes = !showNotes;
