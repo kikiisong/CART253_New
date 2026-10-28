@@ -14,7 +14,7 @@
 >This repo is to collect & show off my prototyping work in *CART253*.
 
 ## Link
-[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20261020.md)
+[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20261027.md)
 
 [Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
@@ -28,7 +28,7 @@ Sit up, but don't let CAT find out you are awake.
 ![Cat2](images/cat2.png)
 
 [Page](https://kikiisong.github.io/CART253_New/prototypes/functions/cat-2/) | 
-[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/funtions/cat-2)
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/cat-2)
 
 #### Makeup Salon
 
