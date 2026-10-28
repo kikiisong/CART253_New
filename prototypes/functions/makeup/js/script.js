@@ -10,6 +10,7 @@
 const canvasW = 500;
 const canvasH = 600;
 
+// measurements
 const face = {
     x: 250,
     y: 250,
@@ -22,11 +23,6 @@ const ear = {
     offsetX: 125,
     width: 45,
     length: 70,
-    inner: {
-        yShift: 2,
-        width: 20,
-        length: 35
-    },
 };
 
 const neck = {
@@ -97,7 +93,7 @@ const eye = {
         color: '#ffffff'
     },
     maxLook: 14, // how far the pupil can slide from the eye center
-    lookSpeed: 10, // pupil movement pace
+    lookSpeed: 10, // smoother pupil movement
 };
 
 const brow = {
@@ -146,6 +142,9 @@ function draw() {
 
 }
 
+/**
+ * Draw parts of the person
+ */
 function drawPerson() {
     drawBackHair()
     drawBody();
@@ -158,9 +157,13 @@ function drawPerson() {
     drawEye(face.x - eye.offsetX, eye.y);
     drawEye(face.x + eye.offsetX, eye.y);
     drawLipsticks();
+    // change cursor shape when hovered over lipstick
     cursor(onLipstick(mouseX, mouseY) !== -1 ? HAND : ARROW);
 }
 
+/**
+ * Draw head
+ */
 function drawHead() {
     push();
     noStroke();
@@ -169,6 +172,9 @@ function drawHead() {
     pop();
 }
 
+/**
+ * Draw ears
+ */
 function drawEars() {
     push();
     noStroke();
@@ -182,6 +188,9 @@ function drawEars() {
     pop();
 }
 
+/**
+ * Draw body
+ */
 function drawBody() {
     push()
     noStroke()
@@ -193,6 +202,9 @@ function drawBody() {
     arc(face.x, shirt.y, shirt.width, shirt.length, PI, TWO_PI, CHORD);
 }
 
+/**
+ * Draw back of the hair
+ */
 function drawBackHair() {
     push();
     const b = hair.back;
@@ -202,6 +214,9 @@ function drawBackHair() {
     pop();
 }
 
+/**
+ * Draw bang
+ */
 function drawBang() {
     push();
     const b = hair.bang;
@@ -211,6 +226,9 @@ function drawBang() {
     pop();
 }
 
+/**
+ * Draw nose
+ */
 function drawNose() {
     push();
     noStroke();
@@ -219,6 +237,9 @@ function drawNose() {
     pop();
 }
 
+/**
+ * Draw mouth
+ */
 function drawMouth() {
     push();
     stroke(mouth.lineColor);
@@ -229,6 +250,10 @@ function drawMouth() {
     pop();
 }
 
+/**
+ * 
+ * Draw a single eye
+ */
 function drawEye(x, y) {
     push();
     noStroke();
@@ -237,7 +262,9 @@ function drawEye(x, y) {
     ellipse(x, y, eye.width, eye.length);
 
     // pupil slides toward the mouse up to a max distance
+    // calculates the directional angle between eye center and mouse
     const angle = atan2(mouseY - y, mouseX - x);
+    // smoother (look speed) movement that stays in the eye (min)
     const reach = min(eye.maxLook, dist(mouseX, mouseY, x, y) / eye.lookSpeed);
     const px = x + cos(angle) * reach;
     const py = y + sin(angle) * reach;
@@ -251,7 +278,11 @@ function drawEye(x, y) {
     pop();
 }
 
+/**
+ * Draw brows
+ */
 function drawBrows() {
+    // brown lift up or down depends on mouse position, normalized
     const lift = map(mouseY, 0, height, brow.liftMin, brow.liftMax, true);
     const y = brow.y + lift;
 
@@ -265,13 +296,22 @@ function drawBrows() {
     pop();
 }
 
+/**
+ * Draw lipsticks
+ */
 function drawLipsticks() {
+    // go through the arry and draw different colors
     for (let i = 0; i < lipsticks.colors.length; i++) {
+        // calculate the top for each lipstick based on set spacing
         const topY = lipsticks.topY + i * lipsticks.spacing;
         drawLipstick(lipsticks.x, topY, lipsticks.colors[i]);
     }
 }
 
+/**
+ * 
+ * Draw individual lipstick
+ */
 function drawLipstick(x, topY, bulletColor) {
     const l = lipsticks;
     const bulletBottom = topY + l.bulletHeight;
@@ -280,25 +320,28 @@ function drawLipstick(x, topY, bulletColor) {
     push();
     noStroke();
 
+    // bullet
     fill(bulletColor);
     quad(x - l.bulletWidth / 2, topY + l.slant, x + l.bulletWidth / 2, topY, x + l.bulletWidth / 2, bulletBottom, x - l.bulletWidth / 2, bulletBottom);
 
+    //collar
     fill(l.collarColor);
     rect(x - l.caseWidth / 2, bulletBottom, l.caseWidth, l.collarSize);
 
+    //case
     fill(l.caseColor);
     rect(x - l.caseWidth / 2, collarBottom, l.caseWidth, l.caseHeight, 0, 0, l.bottomRadius, l.bottomRadius);
     pop();
 }
 
-// check if x,y overlap with which lipstick
+// iterate over all lipsticks and check if x,y overlap with which lipstick
 function onLipstick(x, y) {
     const halfWidth = lipsticks.caseWidth / 2;
     for (let i = 0; i < lipsticks.colors.length; i++) {
         const top = lipsticks.topY + i * lipsticks.spacing;
         // if x, y is within this lipsticks's width & height, return the index
         if (x >= lipsticks.x - halfWidth && x <= lipsticks.x + halfWidth && y >= top && y <= top + lipsticks.bulletHeight + lipsticks.collarSize + lipsticks.caseHeight)
-            return i;
+            return i; // return if found the overlap
     }
     return -1;
 }
