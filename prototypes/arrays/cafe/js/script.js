@@ -16,7 +16,7 @@ let currentOrder = 0;
 // keep track of how long order has been put in
 let currentOrderStart = undefined;
 // order can wait this long before getting cancelled
-let orderMaxDuration = 5000;
+let orderMaxDuration = 10000;
 // ingredients get added to cup on mouse clicks
 let inCup = [];
 // if in cup ingredients can make a menu item, product record the item
@@ -42,7 +42,7 @@ const fruit = {
 
 const syrup = {
     blossom: {
-        name:"orange blossom",
+        name: "orange blossom",
         emoji: "🌸"
     },
     peace: {
@@ -52,7 +52,7 @@ const syrup = {
     night: {
         name: "vel of the night",
         emoji: "🌌"
-    } 
+    }
 }
 
 const menuItem = {
@@ -100,7 +100,7 @@ const fruitStation = {
     },
     // one can per fruit
     items: [
-        { ingredient: fruit.berries, x: 620},
+        { ingredient: fruit.berries, x: 620 },
         { ingredient: fruit.melon, x: 730 },
         { ingredient: fruit.pomegranate, x: 840 }
     ]
@@ -145,6 +145,20 @@ const cup = {
     emojiSize: 20
 };
 
+const orderBubble = {
+    fill: '#ffffffda',
+    stroke: '#40559c', // dark blue
+    strokeWeight: 3,
+    // the large bubble
+    main: { x: 190, y: 140, width: 270, height: 110 },
+    // small bubbles
+    minis: [
+        { x: 98, y: 262, size: 12 },
+        { x: 118, y: 232, size: 20 }
+    ],
+    content: { fill: '#1b2a5c', size: 24 }
+};
+
 
 /**
  * OH LOOK I DIDN'T DESCRIBE SETUP!!
@@ -154,10 +168,11 @@ function setup() {
 
     // generate the list of menu 
     for (let i = 0; i < orderNum; i++) {
-        orders.push(random(menuItem));
+        orders.push(random(menuItems));
     }
+    console.log(orders);
     //set 1st order
-    currentOrder = orders.pop(0);
+    currentOrder = 0;
     currentOrderStart = millis();
 }
 
@@ -251,17 +266,16 @@ function drawSyrupStation() {
 
 function drawCup() {
     const top = cup.baseY - cup.height;
- 
+
     push();
 
     // draw ingredients in the cup
-    for(let i = 0; i<inCup.length; i++)
-    {
+    for (let i = 0; i < inCup.length; i++) {
         const item = inCup[i];
         noStroke();
         textAlign(CENTER, CENTER);
         textSize(cup.emojiSize);
-        text(item.emoji, cup.x, cup.baseY-cup.bottomEllipseHeight/2-i*cup.emojiSize);
+        text(item.emoji, cup.x, cup.baseY - cup.bottomEllipseHeight - i * cup.emojiSize);
     }
 
     stroke(cup.stroke);
@@ -282,7 +296,30 @@ function drawCup() {
 }
 
 function drawOrder() {
-
+    const order = orders[currentOrder];
+    //console.log(order);
+ 
+    const { main, minis, content} = orderBubble;
+ 
+    push();
+    stroke(orderBubble.stroke);
+    strokeWeight(orderBubble.strokeWeight);
+    fill(orderBubble.fill);
+ 
+    // trail of small bubbles
+    for (const mini of minis) {
+        circle(mini.x, mini.y, mini.size);
+    }
+    // main bubble
+    ellipse(main.x, main.y, main.width, main.height);
+ 
+    // order name in the center
+    noStroke();
+    fill(content.fill);
+    textAlign(CENTER, CENTER);
+    textSize(content.size);
+    text(order.name, main.x, main.y);
+    pop();
 }
 
 function drawScore() {
@@ -302,12 +339,15 @@ function updateOrder() {
 function canMakeItem() {
     if (inCup.length === 2) {
         for (const item of menuItems) {
-            // can it be forced in like alphabetic order, so only compare items in the same index
-            // or loop and compare
-
-            //clear the cup
-            inCup.length = 0;
-            return item
+            // since in cup length needs to be 2 and ingredients is always 2, we make sure this match means exact ingredient match
+            // may need to change if more complex recipe gets added
+            const matches = item.ingredients.every(ing => inCup.includes(ing));
+            if (matches) {
+                //clear the cup
+                inCup.length = 0;
+                console.log("matched " + item.name);
+                return item;
+            }
         }
     }
     //clear the cup
@@ -371,14 +411,17 @@ function mousePressed() {
             inCup.push(clickedSyrup);
         }
     }
-    console.log(inCup);
+    //console.log(inCup);
 
     //if clicked on cup, check if can make Item, return the item or clear the cup
-    /*product = canMakeItem();
-    if (product === orders[currentOrder]) {
-        points++;
-        nextOrder();
-    }*/
+    else if (pointInRect(mouseX, mouseY, cup.x - cup.topWidth / 2, cup.baseY - cup.height - cup.rimHeight / 2, cup.topWidth, cup.height + cup.rimHeight / 2 + cup.bottomEllipseHeight / 2)) {
+        console.log("in Cup")
+        product = canMakeItem();
+        if (product === orders[currentOrder]) {
+            points++;
+            nextOrder();
+        }
+    }
 }
 
 function nextOrder() {
