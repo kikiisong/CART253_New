@@ -26,15 +26,33 @@ let points = 0;
 let gameEnd = false;
 
 const fruit = {
-    berries: "berries",
-    melon: "melon",
-    pomegranate: "pomegranate"
+    berries: {
+        name: "berries",
+        emoji: "🫐"
+    },
+    melon: {
+        name: "melon",
+        emoji: "🍈"
+    },
+    pomegranate: {
+        name: "pomegranate",
+        emoji: "🍎"
+    }
 }
 
 const syrup = {
-    blossom: "orange blossom",
-    peace: "peace & love",
-    night: "vel of the night"
+    blossom: {
+        name:"orange blossom",
+        emoji: "🌸"
+    },
+    peace: {
+        name: "peace & love",
+        emoji: "💗"
+    },
+    night: {
+        name: "vel of the night",
+        emoji: "🌌"
+    } 
 }
 
 const menuItem = {
@@ -82,9 +100,9 @@ const fruitStation = {
     },
     // one can per fruit
     items: [
-        { ingredient: fruit.berries, x: 620, emoji: "🫐" },
-        { ingredient: fruit.melon, x: 730, emoji: "🍈" },
-        { ingredient: fruit.pomegranate, x: 840, emoji: "🍎" }
+        { ingredient: fruit.berries, x: 620},
+        { ingredient: fruit.melon, x: 730 },
+        { ingredient: fruit.pomegranate, x: 840 }
     ]
 };
 
@@ -107,10 +125,24 @@ const syrupStation = {
     },
     // one container per syrup
     items: [
-        { ingredient: syrup.blossom, x: 620, emoji: "🌸" },
-        { ingredient: syrup.peace, x: 730, emoji: "💗" },
-        { ingredient: syrup.night, x: 840, emoji: "🌌" }
+        { ingredient: syrup.blossom, x: 620 },
+        { ingredient: syrup.peace, x: 730 },
+        { ingredient: syrup.night, x: 840 }
     ]
+};
+
+const cup = {
+    x: 450, // center x
+    baseY: 300, // y of the bottom
+    height: 100,
+    topWidth: 70,
+    bottomWidth: 45,
+    stroke: '#91b7fd',
+    strokeWeight: 3,
+    fill: '#91b7f49a',
+    bottomEllipseHeight: 14,
+    rimHeight: 18,
+    emojiSize: 20
 };
 
 
@@ -187,7 +219,7 @@ function drawFruitStation() {
         noStroke();
         textAlign(CENTER, CENTER);
         textSize(can.emojiSize);
-        text(item.emoji, item.x, top + can.height / 2 + 4);
+        text(item.ingredient.emoji, item.x, top + can.height / 2 + 4);
     }
     pop();
 }
@@ -212,13 +244,41 @@ function drawSyrupStation() {
         noStroke();
         textAlign(CENTER, CENTER);
         textSize(container.emojiSize);
-        text(item.emoji, item.x, top + container.height / 2);
+        text(item.ingredient.emoji, item.x, top + container.height / 2);
     }
     pop();
 }
 
 function drawCup() {
+    const top = cup.baseY - cup.height;
+ 
+    push();
 
+    // draw ingredients in the cup
+    for(let i = 0; i<inCup.length; i++)
+    {
+        const item = inCup[i];
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(cup.emojiSize);
+        text(item.emoji, cup.x, cup.baseY-cup.bottomEllipseHeight/2-i*cup.emojiSize);
+    }
+
+    stroke(cup.stroke);
+    strokeWeight(cup.strokeWeight);
+    fill(cup.fill);
+    // cup body
+    beginShape();
+    vertex(cup.x - cup.topWidth / 2, top);
+    vertex(cup.x + cup.topWidth / 2, top);
+    vertex(cup.x + cup.bottomWidth / 2, cup.baseY);
+    vertex(cup.x - cup.bottomWidth / 2, cup.baseY);
+    endShape(CLOSE);
+    // rounded bottom and rim
+    ellipse(cup.x, cup.baseY, cup.bottomWidth, cup.bottomEllipseHeight);
+    fill(cup.fill);
+    ellipse(cup.x, top, cup.topWidth, cup.rimHeight);
+    pop();
 }
 
 function drawOrder() {
@@ -299,6 +359,7 @@ function mousePressed() {
         const clickedFruit = getClickedFruit();
         if (clickedFruit !== null) {
             console.log(clickedFruit);
+            inCup.push(clickedFruit);
         }
         // else if cllicked area in syrup station
     } else if (mouseX > syrupStation.items[0].x - syrupStation.container.width / 2
@@ -307,15 +368,17 @@ function mousePressed() {
         const clickedSyrup = getClickedSyrup();
         if (clickedSyrup !== null) {
             console.log(clickedSyrup);
+            inCup.push(clickedSyrup);
         }
     }
+    console.log(inCup);
 
     //if clicked on cup, check if can make Item, return the item or clear the cup
-    product = canMakeItem();
+    /*product = canMakeItem();
     if (product === orders[currentOrder]) {
         points++;
         nextOrder();
-    }
+    }*/
 }
 
 function nextOrder() {
