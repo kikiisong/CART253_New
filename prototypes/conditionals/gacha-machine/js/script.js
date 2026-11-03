@@ -7,6 +7,7 @@
 
 "use strict";
 
+//knob measurements
 const knob = {
     x: 125,
     y: 305,
@@ -18,6 +19,7 @@ const State = {
     IDLE: 0,
     DRAWN: 1
 };
+// determine if a draw has been done, 0=false, 1=true
 let currentState = 0;
 
 //most recent drawn item
@@ -58,12 +60,17 @@ function draw() {
 
 }
 
-// draws the machine
+/**
+ * draws the machine
+ */ 
 function drawMachine() {
     drawContainer();
     drawKnob();
 }
 
+/**
+ * Draw the container part of the machine
+ */
 function drawContainer() {
     push();
     // container
@@ -76,6 +83,9 @@ function drawContainer() {
 
 }
 
+/**
+ * draw the knob
+ */
 function drawKnob() {
 
     push();
@@ -95,6 +105,9 @@ function drawKnob() {
     pop();
 }
 
+/**
+ * draw an item if mouse click is on the knob
+ */
 function mousePressed() {
     if(mouseX>knob.x-knob.radius && mouseX<knob.x+knob.radius
         &&mouseY >knob.y-knob.radius && mouseY<knob.y+knob.radius)
@@ -104,6 +117,9 @@ function mousePressed() {
 
 }
 
+/**
+ * pick the item
+ */
 function doTheDraw() {
     // normal distribution
     const z = abs(randomGaussian(0, 1));
@@ -124,7 +140,9 @@ function doTheDraw() {
     currentState = State.DRAWN;
 }
 
-//draw the outcome
+/** 
+ * draw the outcome
+*/
 function drawResult() {
     push();
     textAlign(CENTER);

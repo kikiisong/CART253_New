@@ -14,11 +14,65 @@
 >This repo is to collect & show off my prototyping work in *CART253*.
 
 ## Link
-[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20260929.md)
+[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20261027.md)
 
 [Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
 ## Prototype 
+
+### Functions
+#### CAT 2
+
+Sit up, but don't let CAT find out you are awake.
+
+![Cat2](images/cat2.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/cat-2/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/cat-2)
+
+#### Makeup Salon
+
+![Makeup](images/makeup.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/makeup/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/makeup)
+
+#### Bass
+
+![Bass](images/bass.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/functions/bass/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/functions/bass)
+
+
+### Events
+#### CAT
+
+CAT is watching you 👀 Get into the Canvas! or out...
+
+![Cat](images/cat.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/cat/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/cat)
+
+#### Gacha Fortune Teller
+
+Get a glimpse into the future...(beta version)
+
+![Gacha 2](images/gacha-machine-2.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/gacha-machine-2/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/gacha-machine-2)
+
+#### Launchpad
+
+Make beats...and paint!
+
+![launchpad](images/launchpad.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/events/launch-pad/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/events/launch-pad)
+
 ### Conditionals
 #### Mushroooom
 

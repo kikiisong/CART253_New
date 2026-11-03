@@ -10,6 +10,7 @@
 const canvasW = 400;
 const canvasH = 600;
 
+//character info
 const character = {
     x: canvasW / 2,
     y: canvasH - 15,
@@ -17,6 +18,7 @@ const character = {
     r: 30
 }
 
+//mushroom info
 const mushroom = {
     x: canvasW/2,
     y: canvasH/2,
@@ -45,6 +47,9 @@ function draw() {
     checkCollision();
 }
 
+/**
+ * Instructions text
+ */
 function drawInstructions()
 {
     push();
@@ -53,7 +58,9 @@ function drawInstructions()
     pop();
 }
 
-// use arrow keys to control the character
+/**
+ *  use arrow keys to control the character
+ */ 
 function moveCharacter() {
     if (keyIsDown(UP_ARROW)) 
         character.y = constrain(character.y - character.speed, 0, canvasH);
@@ -77,8 +84,9 @@ function drawCharacter() {
     pop();
 }
 
-// Draw the mushroom
-// a red circle for now
+/**
+ *  Draw the mushroom as a red circle for now
+ */ 
 function drawMushroom() {
     if(mushroom.toUpdate)
     {
@@ -94,6 +102,9 @@ function drawMushroom() {
     pop();
 }
 
+/**
+ * Check if mushroom and character overlaps enough
+ */
 function checkCollision()
 {
     if(dist(mushroom.x, mushroom.y, character.x, character.y) < mushroom.r)
