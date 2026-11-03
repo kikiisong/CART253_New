@@ -1,8 +1,10 @@
 /**
  * Lines
- * Pippin Barr
+ * Mona & Kiki
+ * Base code: Pippin Barr
  * 
- * A series of lines across the canvas
+ * Looping rainbowwwwww
+ * Original: A series of lines across the canvas
  */
 
 "use strict";
@@ -12,6 +14,7 @@
  */
 function setup() {
     createCanvas(500, 500);
+    // update color mode to hsb
     colorMode(HSB);
 }
 
@@ -22,12 +25,16 @@ function setup() {
 function draw() {
     background("pink");
     push();
+
+    // background gradient by drawing circle outlines 1 pixel apart
     for (let bg_x = 0; bg_x <= width + 200; bg_x++)
     {
         // stroke(map(bg_x, 0, width, 0, 360), 50, 80);
+        // rainbow animation
         stroke(map(bg_x, 0, width, 0, 360) * tan(frameCount * 0.02) + 500, 50, 80);
-        //line(bg_x, 0, bg_x, height);
+        // line(bg_x, 0, bg_x, height);
         noFill();
+        // radial gradient
         circle(width/2, height/2,bg_x);
     }
     pop();
@@ -36,14 +43,18 @@ function draw() {
     let strokeColor = 0;
     let x = 0;
 
+    // grid
     push();
     while(x <= 500)
     {
+        // gradient stroke color
         stroke(strokeColor);
+        // vertical lines
         line(x, 0, x, height);
-
+        // horizontal perspective lines
         line(0, x, width, 0);
 
+        // increment values
         strokeColor += 25;
         x += 50;
         
