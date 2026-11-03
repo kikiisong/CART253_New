@@ -12,6 +12,7 @@
  */
 function setup() {
     createCanvas(500, 500);
+    colorMode(HSB);
 }
 
 /**
@@ -20,14 +21,22 @@ function setup() {
  */
 function draw() {
     background("pink");
-    
-    
-
+    push();
+    for (let bg_x = 0; bg_x <= width + 200; bg_x++)
+    {
+        // stroke(map(bg_x, 0, width, 0, 360), 50, 80);
+        stroke(map(bg_x, 0, width, 0, 360) * cos(frameCount * 0.02) + 0, 50, 80);
+        //line(bg_x, 0, bg_x, height);
+        noFill();
+        circle(width/2, height/2,bg_x);
+    }
+    pop();
 
 
     let strokeColor = 0;
     let x = 0;
 
+    push();
     while(x <= 500)
     {
         stroke(strokeColor);
@@ -39,6 +48,8 @@ function draw() {
         x += 50;
         
     }
+
+    pop();
 
     // stroke(0);
     // line(0, 0, 0, height);
