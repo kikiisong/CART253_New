@@ -25,7 +25,7 @@ function draw() {
     for (let bg_x = 0; bg_x <= width + 200; bg_x++)
     {
         // stroke(map(bg_x, 0, width, 0, 360), 50, 80);
-        stroke(map(bg_x, 0, width, 0, 360) * cos(frameCount * 0.02) + 0, 50, 80);
+        stroke(map(bg_x, 0, width, 0, 360) * tan(frameCount * 0.02) + 500, 50, 80);
         //line(bg_x, 0, bg_x, height);
         noFill();
         circle(width/2, height/2,bg_x);
