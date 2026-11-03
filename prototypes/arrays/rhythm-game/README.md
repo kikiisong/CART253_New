@@ -1,6 +1,6 @@
-# TITLE OF PROJECT
+# Rhythm Game In Silence
 
-AUTHOR NAME
+Kiki
 
 [View this project online](URL_FOR_THE_RUNNING_PROJECT)
 
