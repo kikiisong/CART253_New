@@ -14,11 +14,38 @@
 >This repo is to collect & show off my prototyping work in *CART253*.
 
 ## Link
-[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20261027.md)
+[Current Week Journal](https://github.com/kikiisong/CART253_New/blob/main/journals/20261103.md)
 
 [Reflective Journals](https://github.com/kikiisong/CART253_New/tree/main/journals)
 
 ## Prototype 
+
+### Arrays
+#### Cafe
+
+Firsty day at the job but everyone else is sick so you are on your own. Add ingredients and mix in cup. (Hint: 2 is the magic number)
+
+![cafe](images/cafe.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/arrays/cafe/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/arrays/cafe)
+
+#### Rhythm Game But Only Drums
+
+Hit space to drum
+
+![rhythm game](images/rhythm.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/arrays/rhythm-game/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/arrays/rhythm-game)
+
+#### Paranatural Entity S-13
+
+![sticky notes](images/sticky-notes.png)
+
+[Page](https://kikiisong.github.io/CART253_New/prototypes/arrays/sticky-notes/) | 
+[Repo](https://github.com/kikiisong/CART253_New/tree/main/prototypes/arrays/sticky-notes)
+
 
 ### Functions
 #### CAT 2
