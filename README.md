@@ -23,7 +23,7 @@
 ### Arrays
 #### Cafe
 
-Firsty day at the job but everyone else is sick so you are on your own. Add ingredients and mix in cup. (Hint: 2 is the magic number)
+First day at the job but everyone else is sick so you are on your own. Add ingredients and mix in cup. (Hint: 2 is the magic number)
 
 ![cafe](images/cafe.png)
 
