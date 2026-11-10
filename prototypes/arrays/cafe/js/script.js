@@ -2,29 +2,13 @@
  * Cafe
  * Kiki
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Happy customer, happy barista.
  */
 
 "use strict";
 
-// current order player need to make
-let orders = [];
-const orderNum = 4;
-// current order item index
-let currentOrder = 0;
-// keep track of how long order has been put in
-let currentOrderStart = undefined;
-// order can wait this long before getting cancelled
-let orderMaxDuration = 10000;
-// ingredients get added to cup on mouse clicks
-let inCup = [];
-// if in cup ingredients can make a menu item, product record the item
-let product = undefined;
-// success order num
-let points = 0;
-let gameEnd = false;
-
+//fruits info
+//name for comparing recipe, emoji for drawing
 const fruit = {
     berries: {
         name: "berries",
@@ -40,6 +24,8 @@ const fruit = {
     }
 }
 
+//syrups info
+//name for comparing recipe, emoji for drawing
 const syrup = {
     blossom: {
         name: "orange blossom",
@@ -55,6 +41,7 @@ const syrup = {
     }
 }
 
+// menu items (order): name for display and ingredients for matching
 const menuItem = {
     magical: {
         name: "Magical Berries",
@@ -70,11 +57,12 @@ const menuItem = {
     }
 };
 
-
+// menu item array
 const menuItems = [menuItem.magical, menuItem.dragon, menuItem.summer];
+
+// ingredients arrays for drawing
 const fruits = [fruit.berries, fruit.melon, fruit.pomegranate];
 const syrups = [syrup.stardust, syrup.peace, syrup.night];
-//const garnish = [""]
 
 //measurement of the drawn items
 const counter = {
@@ -159,43 +147,93 @@ const orderBubble = {
     content: { fill: '#1b2a5c', size: 24 }
 };
 
+const UI = {
+    timer: {
+        x: 200,
+        y: 20,
+        color: '#FFFFFF',
+        length: 200,
+        height: 20
+    }
+}
+
+// array of ordered items
+// hard coded order for better demo experience for now
+let orders = [menuItem.magical, menuItem.dragon, menuItem.summer, menuItem.magical];
+// total num of orders
+const orderNum = 4;
+// current order item index
+let currentOrder = 0;
+// keep track of how long order has been put in
+let currentOrderStart = undefined;
+// order can wait this long before getting cancelled
+let orderMaxDuration = 10000;
+// ingredients get added to cup on mouse clicks
+let inCup = [];
+// if in cup ingredients can make a menu item, record the item in product for comparison with current order
+let product = undefined;
+// success order num
+let points = 0;
+// control game state
+let gameEnd = false;
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * set up the canvas & game logic initialization
 */
 function setup() {
     createCanvas(900, 600);
 
-    // generate the list of menu 
-    for (let i = 0; i < orderNum; i++) {
-        orders.push(random(menuItems));
-    }
-    console.log(orders);
-    //set 1st order
+    //console.log(orders);
+    //set 1st order & start timer
     currentOrder = 0;
     currentOrderStart = millis();
 }
 
 
 /**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
+ * draw components
 */
 function draw() {
     background('#9cd5f8');
 
+    //check time to see if time's up and go to next order
     if (!gameEnd) {
+        updateOrder();
+    }
+
+    if (gameEnd) { //if game ended, draw score screen
+        drawScore();
+    } else { // if not, draw components
         drawCafe();
         drawFruitStation();
         drawSyrupStation();
         drawCup();
-        //customer come & ask for type of drink
-        updateOrder();
+
         drawOrder();
-    } else {
-        drawScore();
+        drawTimer();
     }
+
 }
 
+/**
+ * timer indicator for each order
+ */
+function drawTimer() {
+    push();
+    noFill();
+    strokeWeight(2);
+    stroke(UI.timer.color);
+    rect(UI.timer.x, UI.timer.y, UI.timer.length, UI.timer.height);
+
+    noStroke();
+    fill(UI.timer.color);
+    rect(UI.timer.x, UI.timer.y, UI.timer.length * ((millis() - currentOrderStart) / orderMaxDuration), UI.timer.height);
+    pop();
+}
+
+/**
+ * draw counter and shelf
+ */
 function drawCafe() {
     push();
     noStroke();
@@ -209,6 +247,9 @@ function drawCafe() {
     pop();
 }
 
+/**
+ * draw cans of fruits based on the fruits array
+ */
 function drawFruitStation() {
     const { baseY, can, items } = fruitStation;
     const top = baseY - can.height;
@@ -238,6 +279,10 @@ function drawFruitStation() {
     }
     pop();
 }
+
+/**
+ * draw bottles of syrup based on the syrup array
+ */
 function drawSyrupStation() {
     const { baseY, container, items } = syrupStation;
     const cap = container.cap;
@@ -264,6 +309,9 @@ function drawSyrupStation() {
     pop();
 }
 
+/**
+ * draw cup
+ */
 function drawCup() {
     const top = cup.baseY - cup.height;
 
@@ -295,24 +343,28 @@ function drawCup() {
     pop();
 }
 
+
+/**
+ * draw order bubble and order text
+ */
 function drawOrder() {
     const order = orders[currentOrder];
     //console.log(order);
- 
-    const { main, minis, content} = orderBubble;
- 
+
+    const { main, minis, content } = orderBubble;
+
     push();
     stroke(orderBubble.stroke);
     strokeWeight(orderBubble.strokeWeight);
     fill(orderBubble.fill);
- 
+
     // trail of small bubbles
     for (const mini of minis) {
         circle(mini.x, mini.y, mini.size);
     }
     // main bubble
     ellipse(main.x, main.y, main.width, main.height);
- 
+
     // order name in the center
     noStroke();
     fill(content.fill);
@@ -322,10 +374,23 @@ function drawOrder() {
     pop();
 }
 
+/**
+ * draw score screen based on drinks made
+ */
 function drawScore() {
+    push();
+    fill('#ffffff');
+    textAlign(CENTER, CENTER);
 
+    textSize(48);
+    // only keep 2 decimals
+    text("drinks made: " + points + " / 4", width / 2, height / 2);
+    pop();
 }
 
+/**
+ * go to next order if time's up
+ */
 function updateOrder() {
     const timeElapsed = millis() - currentOrderStart;
     // if order time has passed, go to next order without getting points
@@ -345,7 +410,7 @@ function canMakeItem() {
             if (matches) {
                 //clear the cup
                 inCup.length = 0;
-                console.log("matched " + item.name);
+                //console.log("matched " + item.name);
                 return item;
             }
         }
@@ -367,6 +432,7 @@ function getClickedFruit() {
     const top = baseY - can.height - can.ellipseHeight / 2;
     const h = can.height + can.ellipseHeight / 2;
 
+    // check for each fruit
     for (const item of items) {
         if (pointInRect(mouseX, mouseY, item.x - can.width / 2, top, can.width, h)) {
             return item.ingredient;
@@ -381,6 +447,7 @@ function getClickedSyrup() {
     // just the container, no cap
     const top = baseY - container.height;
 
+    // check for each syrup
     for (const item of items) {
         if (pointInRect(mouseX, mouseY, item.x - container.width / 2, top, container.width, container.height)) {
             return item.ingredient;
@@ -389,7 +456,12 @@ function getClickedSyrup() {
     return null;
 }
 
-// 
+/**
+ * interactions:
+ * press fruit or syrup to add the ingredient to cup
+ * add cup to mix
+ * 
+ */
 function mousePressed() {
     //if clicked on a fruit or syrup, add to cup
     //if clicked area is in fruit station
@@ -398,7 +470,7 @@ function mousePressed() {
         && mouseY < fruitStation.baseY + fruitStation.can.ellipseHeight) {
         const clickedFruit = getClickedFruit();
         if (clickedFruit !== null) {
-            console.log(clickedFruit);
+
             inCup.push(clickedFruit);
         }
         // else if cllicked area in syrup station
@@ -407,16 +479,16 @@ function mousePressed() {
         && mouseY < syrupStation.baseY) {
         const clickedSyrup = getClickedSyrup();
         if (clickedSyrup !== null) {
-            console.log(clickedSyrup);
+
             inCup.push(clickedSyrup);
         }
     }
-    //console.log(inCup);
 
     //if clicked on cup, check if can make Item, return the item or clear the cup
     else if (pointInRect(mouseX, mouseY, cup.x - cup.topWidth / 2, cup.baseY - cup.height - cup.rimHeight / 2, cup.topWidth, cup.height + cup.rimHeight / 2 + cup.bottomEllipseHeight / 2)) {
-        console.log("in Cup")
+        //check if a drink can be made. if yes, get the drink
         product = canMakeItem();
+        // if product matched current order, get a point and go to next order
         if (product === orders[currentOrder]) {
             points++;
             nextOrder();
