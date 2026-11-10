@@ -1,8 +1,11 @@
 /**
- * Terrible New Car
- * Pippin Barr
+ * Colorful New Car
  * 
- * A program to generate new car model names using dinosaurs.
+ * Kiki and Mona
+ * 
+ * Base code by Pippin Barr
+ * 
+ * A program to generate new car model names using color names and dinosaurs.
  * 
  * Uses:
  * Darius Kazemi's corpora repository
@@ -11,21 +14,29 @@
 
 "use strict";
 
+//Define variables
 let carData = undefined;
 let dinosaurData = undefined;
+let colorData = undefined;
 let langData = undefined;
+
+//Set language
 let lang = "fr";
 
 // Starts with the instruction
 let carName = "Click to generate a car name.";
 
+//Initial text color
+let carColor = "pink";
+
 /**
- * Load the car and dinosaur data
+ * Load the car, dinosaur, color and language data
  */
 async function preload() {
     carData = await loadJSON("assets/data/cars.json");
     dinosaurData = await loadJSON("assets/data/dinosaurs.json");
     langData = await loadJSON("assets/data/lang.json");
+    colorData = await loadJSON("assets/data/wikipedia.json");
 }
 
 /**
@@ -37,6 +48,7 @@ async function setup() {
 
     await preload();
 
+    //Load chosen language
     carName = langData.instructions[lang];
 }
 
@@ -47,7 +59,7 @@ function draw() {
     background(0);
 
     push();
-    fill("pink");
+    fill(carColor);
     textAlign(CENTER, CENTER);
     textSize(32);
     text(carName, width / 2, height / 2);
@@ -60,5 +72,11 @@ function draw() {
 function mousePressed() {
     const car = random(carData.cars);
     const dinosaur = random(dinosaurData.dinosaurs);
-    carName = car + " " + dinosaur;
+    const color = random(colorData);
+    //Update color from list of colors
+    carColor = color.color;
+
+    //Update car name with randomly picked color, car and dinosaur
+    carName = color.name + "\n" + car + "\n" + dinosaur;
+   
 }
