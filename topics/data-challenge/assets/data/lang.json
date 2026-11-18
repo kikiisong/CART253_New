@@ -1,0 +1,8 @@
+{
+    "description": "The instructions for the car name generator",
+    "instructions":
+    {
+        "en": "Click to generate a car name.",
+        "fr": "Cliquez pour générer un nom d'auto."
+    }
+}
