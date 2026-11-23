@@ -34,11 +34,13 @@ function setup() {
 function draw() {
     background("#000000");
     //simple();
-    mouseColor();
+    //mouseColor();
     //virusSpread();
-    letterBlink();
+    //letterBlink();
     //rainbowBlink();
     //mouseSpreadColor();
+    //clouds();
+    rain();
     drawLetters();
 }
 
@@ -155,4 +157,37 @@ function mouseSpreadColor() {
     pop();
 
 }
+
+let tx = 0;
+let ty = 0;
+
+// based on example Op Art 6 by Pippin Barr
+function clouds() {
+    const scale = 0.05; 
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+      const n = noise(i * scale, j * scale, tx);
+      colorMap[i][j] = color(map(n, 0.2, 0.8, 100, 360), 100, 100);
+          tx += 0.00001;
+      ty += 0.00001;
+    }
+  }
+}
+
+// 
+function rain() {
+    const scale = 0.05; 
+    let i =floor(random(1, asciiMap.length)); let j = floor(random(asciiMap[i].length));
+    while(i < asciiMap.length && j < asciiMap[i].length){
+      const n = noise(i * scale, j * scale, tx);
+      colorMap[i][j] = color(map(n, 0.2, 0.8, 100, 360), 100, 100);
+      i++;
+      j++;
+          tx += 0.00001;
+      ty += 0.00001;
+    }
+  }
+
+  //to do: use trig
+  //to do: move the grid + 3d effect
 //note: 1 input make it back to initial simple = update everyframe
