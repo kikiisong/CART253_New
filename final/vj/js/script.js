@@ -15,14 +15,17 @@ const txtSize = 10;
 const txtGap = 10;
 let asciiMap = undefined;
 let colorMap = undefined;
+let cols, rows;
 
 /**
  * OH LOOK I DIDN'T DESCRIBE SETUP!!
 */
 function setup() {
     createCanvas(800, 800);
+    angleMode(DEGREES)
     initColors();
     initMaps();
+    noCursor(); 
 }
 
 /**
@@ -30,7 +33,12 @@ function setup() {
 */
 function draw() {
     background("#000000");
-    simple();
+    //simple();
+    //mouseColor();
+    virusSpread();
+    //letterBlink();
+    rainbowBlink();
+    drawLetters();
 }
 
 function initColors(){
@@ -39,8 +47,8 @@ function initColors(){
 }
 
 function initMaps() {
-    const cols = ceil(width / txtGap);
-    const rows = ceil(height / txtGap);
+    cols = ceil(width / txtGap);
+    rows = ceil(height / txtGap);
 
     asciiMap = [];
     colorMap = [];
@@ -54,17 +62,90 @@ function initMaps() {
     }
 }
 
-function simple() {
+// draw letters based on maps
+function drawLetters() {
     push();
-    fill(colorControl.blank);
     textSize(txtSize);
     for (let i = 0; i < asciiMap.length; i++) {
         for (let j = 0; j < asciiMap[i].length; j++) {
-            fill(color(random(360), random(100), random(100)));
+            fill(colorMap[i][j]);
             text(asciiMap[i][j], i * txtGap, j * txtGap);
         }
     }
     pop();
 }
 
+/*function simple() {
+    push();
+    textSize(txtSize);
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+            fill(colorMap[i][j]);
+            text(asciiMap[i][j], i * txtGap, j * txtGap);
+        }
+    }
+    pop();
+}*/
+
+//================ Text Controls =================
+function letterBlink() {
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+            asciiMap[i][j] = symbols[floor(random(symbols.length))];
+        }
+    }
+}
+
+// some letters in a randomly defined square disapear
+function virusSpread() {
+
+    const sqTopx = floor(random(0, rows));
+    const sqTopy = floor(random(0, cols));
+    const sqSizex = floor(random(0, rows-sqTopx));
+    const sqSizey = floor(random(0, cols-sqTopy));
+
+    for(let i =sqTopx; i < sqSizex; i++){
+        for(let j =sqTopy; j < sqSizey; j++){
+            //2nd layer of randomness, 50% chance to disappear
+            asciiMap[i][j] = random() < 0.5 ? asciiMap[i][j] : ' ';
+        }
+    }
+}
+
+//================ Color Controls =================
+// change color every frame
+function rainbowBlink() {
+    push();
+    textSize(txtSize);
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+            colorMap[i][j] = color(random(360), random(100), random(100));
+            //text(asciiMap[i][j], i * txtGap, j * txtGap);
+        }
+    }
+    pop();
+}
+
+function mouseColor() {
+    push();
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+            colorMap[i][j] = color(map(mouseY, 0, height, 0, 360, true), map(mouseX, 0, width, 0, 100, true), 100);
+        }
+    }
+    pop();
+}
+
+function trigColor() {
+    push();
+    const initX = floor(mouseX / txtGap);
+    const initY = floor(mouseY / txtGap);
+    for (let i = 0; i < asciiMap.length; i++) {
+        for (let j = 0; j < asciiMap[i].length; j++) {
+            colorMap[i][j] = color(map(mouseY, 0, height, 0, 360, true), map(mouseX, 0, width, 0, 100, true), 100);
+        }
+    }
+    pop();
+
+}
 //note: 1 input make it back to initial simple = update everyframe
