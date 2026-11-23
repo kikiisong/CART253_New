@@ -34,11 +34,11 @@ function setup() {
 function draw() {
     background("#000000");
     //simple();
-    //mouseColor();
-    virusSpread();
-    //letterBlink();
+    mouseColor();
+    //virusSpread();
+    letterBlink();
     //rainbowBlink();
-    mouseSpreadColor();
+    //mouseSpreadColor();
     drawLetters();
 }
 
