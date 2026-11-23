@@ -37,7 +37,8 @@ function draw() {
     //mouseColor();
     virusSpread();
     //letterBlink();
-    rainbowBlink();
+    //rainbowBlink();
+    mouseSpreadColor();
     drawLetters();
 }
 
@@ -136,13 +137,19 @@ function mouseColor() {
     pop();
 }
 
-function trigColor() {
+function mouseSpreadColor() {
     push();
-    const initX = floor(mouseX / txtGap);
-    const initY = floor(mouseY / txtGap);
-    for (let i = 0; i < asciiMap.length; i++) {
-        for (let j = 0; j < asciiMap[i].length; j++) {
-            colorMap[i][j] = color(map(mouseY, 0, height, 0, 360, true), map(mouseX, 0, width, 0, 100, true), 100);
+    const initX = constrain(floor(mouseX / txtGap), 0, cols - 1);
+    const initY = constrain(floor(mouseY / txtGap), 0, rows - 1);
+    const spreadSize = floor(random(60));
+
+    // end positions capped at the grid edge
+    const endX = min(initX + spreadSize, cols);
+    const endY = min(initY + spreadSize, rows);
+
+    for (let i = initX; i < endX; i++) {
+        for (let j = initY; j < endY; j++) {
+            colorMap[i][j] = color(map(mouseX, 0, height, 0, 360, true), 100, 100);
         }
     }
     pop();
