@@ -41,8 +41,8 @@ function setup() {
 */
 function draw() {
     background("#000000");
-    //simple();
-    simple2();
+    simple();
+    //simple2();
     //drawLetters();
 }
 
@@ -90,7 +90,7 @@ function simple() {
     for (let layer = 0; layer < width / layerLength; layer++) {
         const x = layer * layerLength;
         const y = 0;
-        for (let spoke = -100; spoke < 100; spoke++) {
+        for (let spoke = 0; spoke < 1; spoke++) {
             push();
             //stroke(map(spoke, 0, 200, 0, 100))
             //strokeWeight(map(sin(strokeAngle), -1, 1, 0.5, 5));
@@ -137,7 +137,7 @@ function simple2() {
         // change to tan to see different visuals
         x+= map(sin(angle), 1, -1, 1, 60);
         y+= map(cos(angle), 1, -1, -30, 30);
-        text('.', x, y)
+        text('/', x, y)
         angle += 10;
     }
     pop();
@@ -145,3 +145,5 @@ function simple2() {
     tx += 0.01;
     ty += 0.01;
 }
+
+//To Do: let input decides which ascii letter

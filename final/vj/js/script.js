@@ -39,8 +39,8 @@ function draw() {
     //letterBlink();
     //rainbowBlink();
     //mouseSpreadColor();
-    //clouds();
-    rain();
+    clouds();
+    //rain();
     drawLetters();
 }
 
