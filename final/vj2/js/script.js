@@ -99,7 +99,8 @@ function simple() {
             //text('/', x - txtGap * spoke, y - txtGap * spoke);
             text('.', x + txtGap * spoke, y + txtGap * spoke);
             pop();
-            rotate(TWO_PI / 200);
+            // 200 makes cool spiral, 2 makes a fan
+            rotate(TWO_PI / 2);
         }
     }
     rotate(angle * 2 + 0.05);
