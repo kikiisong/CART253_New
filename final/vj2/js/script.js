@@ -41,7 +41,8 @@ function setup() {
 */
 function draw() {
     background("#000000");
-    simple();
+    //simple();
+    simple2();
     //drawLetters();
 }
 
@@ -99,18 +100,12 @@ function simple() {
             //text('/', x - txtGap * spoke, y - txtGap * spoke);
             text('.', x + txtGap * spoke, y + txtGap * spoke);
             pop();
-            // 200 makes cool spiral, 2 makes a fan
+            // 200 makes cool spiral, 2 makes cool fan
             rotate(TWO_PI / 2);
         }
     }
     rotate(angle * 2 + 0.05);
 
-    /*for (let i = 0; i < asciiMap.length; i++) {
-        for (let j = 0; j < asciiMap[i].length; j++) {
-            fill(colorMap[i][j]);
-            text(asciiMap[i][j], i * txtGap, j * txtGap);
-        }
-    }*/
     pop();
 
     angle += 0.001;
@@ -118,8 +113,35 @@ function simple() {
     layerAngle += 0.5;
 }
 
+let tx = 0;
+let ty = 0;
+let x = 0;
+let y = 0;
 
+function simple2() {
+    push();
 
-//to do: use trig
-//to do: move the grid + 3d effect
-//note: 1 input make it back to initial simple = update everyframe
+    fill(random(360), 100, 100);
+    textSize(30);
+    //x += noise(tx + 100) * txtGap;
+        //y += noise(ty + 100) * txtGap;
+        //text('.', x, y);
+        x=10;
+        y=200;
+    for (let i = 0; i < 50; i++) {
+        x = x+noise(tx + 0.05) * txtGap;
+        //y = y+noise(ty + 0.05) * txtGap;
+        //text('.', x, y);
+        //x+=random(20);
+        //y+=random(50);
+        // change to tan to see different visuals
+        x+= map(sin(angle), 1, -1, 1, 60);
+        y+= map(cos(angle), 1, -1, -30, 30);
+        text('.', x, y)
+        angle += 10;
+    }
+    pop();
+
+    tx += 0.01;
+    ty += 0.01;
+}
